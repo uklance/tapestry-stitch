@@ -1,4 +1,4 @@
 tapestry-stitch
 ===============
 
-A tapestry 5 component library
+Sample components and concepts in Tapestry 5

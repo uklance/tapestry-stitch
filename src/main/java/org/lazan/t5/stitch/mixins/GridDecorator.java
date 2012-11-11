@@ -10,19 +10,22 @@ import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.corelib.components.Grid;
 import org.apache.tapestry5.dom.Element;
 import org.apache.tapestry5.dom.Node;
-import org.lazan.t5.stitch.model.CellDecorator;
-import org.lazan.t5.stitch.model.RowDecorator;
+import org.lazan.t5.stitch.model.GridCellDecorator;
+import org.lazan.t5.stitch.model.GridRowDecorator;
 
+/**
+ * Applies decorators to rows and cells in a Grid
+ */
 @MixinAfter
 public class GridDecorator {
 	@InjectContainer
 	private Grid grid;
 	
 	@Parameter
-	private List<RowDecorator> rowDecorators;
+	private List<GridRowDecorator> rowDecorators;
 	
 	@Parameter
-	private List<CellDecorator> cellDecorators;
+	private List<GridCellDecorator> cellDecorators;
 	
 	@AfterRender
 	void afterRender(MarkupWriter writer) {
@@ -40,8 +43,8 @@ public class GridDecorator {
 			int dataIndex = startIndex + trIndex;
 			Object rowValue = grid.getDataSource().getRowValue(dataIndex);
 			if (rowDecorators != null) {
-				for (RowDecorator rowDecorator : rowDecorators) {
-					rowDecorator.decorate(rowElement, rowValue, dataIndex);
+				for (GridRowDecorator rowDecorator : rowDecorators) {
+					rowDecorator.decorate(rowElement, rowValue, trIndex);
 				}
 			}
 			if (cellDecorators != null) {
@@ -49,8 +52,8 @@ public class GridDecorator {
 				int tdIndex = 0;
 				for (String propertyName : propertyNames) {
 					Element cellElement = (Element) cells.get(tdIndex);
-					for (CellDecorator cellDecorator : cellDecorators) {
-						cellDecorator.decorate(cellElement, rowValue, dataIndex, propertyName, tdIndex);
+					for (GridCellDecorator cellDecorator : cellDecorators) {
+						cellDecorator.decorate(cellElement, rowValue, trIndex, propertyName, tdIndex);
 					}
 					++ tdIndex;
 				}

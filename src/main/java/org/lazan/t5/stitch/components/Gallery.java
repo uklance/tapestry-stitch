@@ -13,27 +13,37 @@ import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.lazan.t5.stitch.model.GalleryDataModel;
 
+/**
+ * Renders a paged grid of items in a &lt;table&gt;
+ */
 public class Gallery<T> {
+	// data source
 	@Parameter(required=true)
 	@Property
 	private GalleryDataModel<T> source;
 
+	// number of columns in the grid
 	@Parameter(required=true)
 	private int columns;
 
+	// number of rows in the grid
 	@Parameter(required=true)
 	private int rows;
 
+	// template for rendering each value
 	@Parameter(required=true)
 	@Property
 	private Block valueBlock;
 
+	// the current page being displayed (pageSize = rows * columns)
 	@Property
 	private int page;
 
+	// the current grid row being rendered
 	@Property
 	private List<T> row;
 
+	// the current value being rendered
 	@Parameter
 	@Property
 	private T value;
@@ -46,6 +56,10 @@ public class Gallery<T> {
 		page = 0;
 	}
 
+	/**
+	 * Retrieve the list of values for the current page and group them
+	 * into rows and columns
+	 */
 	public List<List<T>> getGrid() {
 		int pageSize = rows * columns;
 		int startIndex = page * pageSize;
@@ -84,6 +98,10 @@ public class Gallery<T> {
 		return page > 0;
 	}
 
+	/**
+	 * Fired when changing pages. (pageSize = rows * columns)
+	 * @param page The page of data to be displayed
+	 */
 	@OnEvent("changePage")
 	public Block onChangePage(int page) {
 		this.page = page;

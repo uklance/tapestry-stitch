@@ -1,1 +1,1 @@
-<a href="${pdfLink}" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd"><t:delegate to="label" /></a>
+<a href="${link}" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd"><t:delegate to="label" /></a>

@@ -4,22 +4,16 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.inject.Inject;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
@@ -27,64 +21,63 @@ import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.ContentType;
-import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.Link;
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.StreamResponse;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.dom.Document;
-import org.apache.tapestry5.internal.services.HeartbeatImpl;
-import org.apache.tapestry5.internal.services.RenderQueueImpl;
-import org.apache.tapestry5.ioc.services.TypeCoercer;
+import org.apache.tapestry5.dom.Element;
+import org.apache.tapestry5.internal.services.PageRenderQueue;
+import org.apache.tapestry5.internal.services.PageSource;
+import org.apache.tapestry5.internal.structure.Page;
+import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.runtime.RenderCommand;
-import org.apache.tapestry5.services.Environment;
-import org.apache.tapestry5.services.Heartbeat;
 import org.apache.tapestry5.services.MarkupWriterFactory;
+import org.apache.tapestry5.services.PartialMarkupRenderer;
+import org.apache.tapestry5.services.PartialMarkupRendererFilter;
 import org.apache.tapestry5.services.Response;
-import org.slf4j.Logger;
 
 public class PDFLink {
 	@Inject
 	private ComponentResources componentResources;
 
 	@Inject
+	private PageSource pageSource;
+	
+	@Inject
+	private PageRenderQueue pageRenderQueue;
+	
+	@Inject
 	private MarkupWriterFactory markupWriterFactory;
 	
 	@Inject
-	private Logger logger;
+	private PartialMarkupRenderer partialMarkupRenderer;
 	
-	@Inject
-	private Environment environment;
-	
-	@Inject
-	private TypeCoercer typeCoercer;
-
 	@Parameter(defaultPrefix = BindingConstants.LITERAL, required=true)
 	@Property
 	private Block label;
 
-	@Parameter(defaultPrefix = BindingConstants.LITERAL, value = "literal:UTF-8")
-	private String charset;
+	@Parameter(required=true)
+	private RenderCommand fo;
+	
+	@Parameter
+	private String fileName;
 
-	@Property
-	private String context;
-
-	public Link getPdfLink() {
-		Object[] contextArray = context == null ? new Object[0] : new Object[] { context };
-		return componentResources.createEventLink("generatePdf", contextArray);
+	public Link getLink() {
+		return componentResources.createEventLink("pdf");
 	}
 
-	StreamResponse onGeneratePdf(EventContext eventContext) throws FOPException, TransformerException {
-		String fo = getBodyAsString(eventContext);
-		final byte[] pdf = createPdf(fo);
-		
+	StreamResponse onPdf() {
 		return new StreamResponse() {
 			public void prepareResponse(Response response) {
+				if (fileName != null) {
+					response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+				}
 			}
 			
 			public InputStream getStream() throws IOException {
-				return new ByteArrayInputStream(pdf);
+				String foString = getFoAsString();
+				return createPdf(foString);
 			}
 			
 			public String getContentType() {
@@ -93,34 +86,41 @@ public class PDFLink {
 		};
 	}
 
-	private byte[] createPdf(String fo) throws FOPException, TransformerException {
-		FopFactory fopFactory = FopFactory.newInstance();
-		ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
-		Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, byteBuffer);
-		TransformerFactory factory = TransformerFactory.newInstance();
-		Transformer transformer = factory.newTransformer();
-		Result res = new SAXResult(fop.getDefaultHandler());
-		Source source = new StreamSource(new StringReader(fo));
-		transformer.transform(source, res);
-		return byteBuffer.toByteArray();
+	protected InputStream createPdf(String foString) {
+		try {
+			FopFactory fopFactory = FopFactory.newInstance();
+			ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+			Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, byteBuffer);
+			TransformerFactory factory = TransformerFactory.newInstance();
+			Transformer transformer = factory.newTransformer();
+			Result res = new SAXResult(fop.getDefaultHandler());
+			Source source = new StreamSource(new StringReader(foString));
+			transformer.transform(source, res);
+			return new ByteArrayInputStream(byteBuffer.toByteArray());
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
-	private String getBodyAsString(EventContext eventContext) {
-		environment.push(Heartbeat.class, new HeartbeatImpl());
-		if (eventContext.getCount() > 0) {
-			context = eventContext.get(String.class, 0);
-		}
-		ContentType foContentType = new ContentType("text/xml", charset);
-		MarkupWriter markupWriter = markupWriterFactory.newPartialMarkupWriter(foContentType);
-		RenderQueueImpl renderQueue = new RenderQueueImpl(logger);
-		RenderCommand renderCommand = typeCoercer.coerce(componentResources.getBody(), RenderCommand.class);
-		renderQueue.push(renderCommand);
-		renderQueue.run(markupWriter);
-		StringWriter stringWriter = new StringWriter();
-		PrintWriter foWriter = new PrintWriter(stringWriter);
-		Map<String, String> namespaceURIToPrefix = new HashMap<String, String>();
-		Document document = markupWriter.getDocument();
-		document.toMarkup(document, foWriter, namespaceURIToPrefix);
-		return stringWriter.toString();
+	protected String getFoAsString() {
+		final StringBuilder foBuilder = new StringBuilder();
+		String pageName = componentResources.getPageName();
+		Page page = pageSource.getPage(pageName);
+		pageRenderQueue.setRenderingPage(page);
+        pageRenderQueue.addPartialMarkupRendererFilter(new PartialMarkupRendererFilter() {
+			public void renderMarkup(MarkupWriter writer, JSONObject reply, PartialMarkupRenderer renderer) {
+				Element root = writer.element("partial");
+				// ajaxFormUpdateController.setupBeforePartialZoneRender(writer);
+				renderer.renderMarkup(writer, reply);
+				// ajaxFormUpdateController.cleanupAfterPartialZoneRender();
+				writer.end();
+				foBuilder.append(root.getChildMarkup().trim());
+			}
+		});
+        pageRenderQueue.addPartialRenderer(fo);
+
+        MarkupWriter markupWriter = markupWriterFactory.newMarkupWriter(new ContentType("text/xml"));
+        partialMarkupRenderer.renderMarkup(markupWriter, new JSONObject());
+		return foBuilder.toString();
 	}
 }

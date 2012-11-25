@@ -22,28 +22,40 @@ public class Gallery<T> {
 	@Property
 	private GalleryDataModel<T> source;
 
-	// number of columns in the grid
+	/**
+	 * number of columns in the grid
+	 */
 	@Parameter(required=true)
 	private int columns;
 
-	// number of rows in the grid
+	/**
+	 * number of rows in the grid
+	 */
 	@Parameter(required=true)
 	private int rows;
 
-	// template for rendering each value
+	/**
+	 * template for rendering each value
+	 */
 	@Parameter(required=true)
 	@Property
 	private Block valueBlock;
 
-	// the current page being displayed (pageSize = rows * columns)
+	/**
+	 * the current page being displayed (pageSize = rows * columns)
+	 */
 	@Property
 	private int page;
 
-	// the current grid row being rendered
+	/**
+	 * the current grid row being rendered
+	 */
 	@Property
 	private List<T> row;
 
-	// the current value being rendered
+	/**
+	 * the current value being rendered
+	 */
 	@Parameter
 	@Property
 	private T value;

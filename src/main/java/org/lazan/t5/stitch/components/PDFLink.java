@@ -43,23 +43,33 @@ public class PDFLink {
 
 	@Inject
 	private PageSource pageSource;
-	
+
 	@Inject
 	private PageRenderQueue pageRenderQueue;
-	
+
 	@Inject
 	private MarkupWriterFactory markupWriterFactory;
-	
+
 	@Inject
 	private PartialMarkupRenderer partialMarkupRenderer;
-	
-	@Parameter(defaultPrefix = BindingConstants.LITERAL, required=true)
+
+	/**
+	 * This is the link text
+	 */
+	@Parameter(defaultPrefix = BindingConstants.LITERAL, required = true)
 	@Property
 	private Block label;
 
-	@Parameter(required=true)
+	/**
+	 * This {@link Block} renders the FO which in used to generate the PDF
+	 */
+	@Parameter(required = true)
 	private RenderCommand fo;
-	
+
+	/**
+	 * If a filename is provided, the browser will prompt the user to save the
+	 * PDF with this as a default 
+	 */
 	@Parameter
 	private String fileName;
 
@@ -67,6 +77,9 @@ public class PDFLink {
 		return componentResources.createEventLink("pdf");
 	}
 
+	/**
+	 * Render the PDF
+	 */
 	StreamResponse onPdf() {
 		return new StreamResponse() {
 			public void prepareResponse(Response response) {
@@ -74,18 +87,21 @@ public class PDFLink {
 					response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
 				}
 			}
-			
+
 			public InputStream getStream() throws IOException {
 				String foString = getFoAsString();
 				return createPdf(foString);
 			}
-			
+
 			public String getContentType() {
 				return MimeConstants.MIME_PDF;
 			}
 		};
 	}
 
+	/**
+	 * Use Apache FOP to convert the XML FO to a PDF binary stream
+	 */
 	protected InputStream createPdf(String foString) {
 		try {
 			FopFactory fopFactory = FopFactory.newInstance();
@@ -102,12 +118,15 @@ public class PDFLink {
 		}
 	}
 
+	/**
+	 * Run tapestry's template rendering to convert the TML parameter to an XML string
+	 */
 	protected String getFoAsString() {
 		final StringBuilder foBuilder = new StringBuilder();
 		String pageName = componentResources.getPageName();
 		Page page = pageSource.getPage(pageName);
 		pageRenderQueue.setRenderingPage(page);
-        pageRenderQueue.addPartialMarkupRendererFilter(new PartialMarkupRendererFilter() {
+		pageRenderQueue.addPartialMarkupRendererFilter(new PartialMarkupRendererFilter() {
 			public void renderMarkup(MarkupWriter writer, JSONObject reply, PartialMarkupRenderer renderer) {
 				Element root = writer.element("partial");
 				// ajaxFormUpdateController.setupBeforePartialZoneRender(writer);
@@ -117,10 +136,10 @@ public class PDFLink {
 				foBuilder.append(root.getChildMarkup().trim());
 			}
 		});
-        pageRenderQueue.addPartialRenderer(fo);
+		pageRenderQueue.addPartialRenderer(fo);
 
-        MarkupWriter markupWriter = markupWriterFactory.newMarkupWriter(new ContentType("text/xml"));
-        partialMarkupRenderer.renderMarkup(markupWriter, new JSONObject());
+		MarkupWriter markupWriter = markupWriterFactory.newMarkupWriter(new ContentType("text/xml"));
+		partialMarkupRenderer.renderMarkup(markupWriter, new JSONObject());
 		return foBuilder.toString();
 	}
 }

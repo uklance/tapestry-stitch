@@ -37,6 +37,10 @@ import org.apache.tapestry5.services.PartialMarkupRenderer;
 import org.apache.tapestry5.services.PartialMarkupRendererFilter;
 import org.apache.tapestry5.services.Response;
 
+/**
+ * Generates a link to a PDF generated using Apache FOP.
+ * http://xmlgraphics.apache.org/fop/
+ */
 public class PDFLink {
 	@Inject
 	private ComponentResources componentResources;

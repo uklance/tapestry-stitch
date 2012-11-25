@@ -17,7 +17,9 @@ import org.lazan.t5.stitch.model.GalleryDataModel;
  * Renders a paged grid of items in a &lt;table&gt;
  */
 public class Gallery<T> {
-	// data source
+	/**
+	 * data source
+	 */
 	@Parameter(required=true)
 	@Property
 	private GalleryDataModel<T> source;

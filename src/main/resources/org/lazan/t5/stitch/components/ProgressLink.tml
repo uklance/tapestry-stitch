@@ -1,0 +1,5 @@
+<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd">
+	<t:eventlink event="start" zone="prop:zoneId" context="[progressId,zoneId]">Start</t:eventlink>
+	<span id="${progressId}"></span>
+	<t:zone t:id="dummyZone" id="prop:zoneId" />
+</div>

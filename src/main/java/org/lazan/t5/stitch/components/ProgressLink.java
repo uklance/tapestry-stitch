@@ -49,22 +49,22 @@ public class ProgressLink {
 		zoneId = jss.allocateClientId("zone");
 	}
 	
-	void onStart(final String progressId, final String zoneId) {
-		int taskId = taskManager.add(task);
-		updateProgress(progressId, zoneId, taskId, 0);
+	void onStart(String progressId, String zoneId) {
+		int taskId = taskManager.submit(task);
+		addCallback(progressId, zoneId, taskId);
 	}
 	
-	void onUpdateProgress(final String progressId, final String zoneId, final int taskId) {
-		float progress = taskManager.getProgress(taskId);
-		updateProgress(progressId, zoneId, taskId, progress);
+	void onUpdateProgress(String progressId, String zoneId, int taskId) {
+		addCallback(progressId, zoneId, taskId);
 	}
 	
-	void updateProgress(final String progressId, final String zoneId, final int taskId, final float progress) {
+	void addCallback(final String progressId, final String zoneId, final int taskId) {
 		ajaxRenderer.addCallback(new JavaScriptCallback() {
 			public void run(JavaScriptSupport jss) {
+				float progress = taskManager.getProgress(taskId);
 				Link link = resources.createEventLink("updateProgress", progressId, zoneId, taskId);
 				JSONObject args = new JSONObject();
-				args.put("link", link.toString());
+				args.put("url", link.toString());
 				args.put("taskId", taskId);
 				args.put("progress", progress);
 				args.put("progressId", progressId);

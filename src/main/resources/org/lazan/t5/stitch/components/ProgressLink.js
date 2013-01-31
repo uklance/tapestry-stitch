@@ -6,7 +6,7 @@ window.updateProgress = function(args) {
 	if (args.progress < 1) {
 		var closure = function() { 
 			var zoneManager = Tapestry.findZoneManagerForZone(args.zoneId);
-			zoneManager.updateFromURL(args.link); 
+			zoneManager.updateFromURL(args.url); 
 		};
 		setTimeout(closure, 200);
 	}

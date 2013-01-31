@@ -1,5 +1,7 @@
 package org.lazan.t5.stitch.components;
 
+import org.apache.tapestry5.BindingConstants;
+import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.Link;
 import org.apache.tapestry5.annotations.Import;
@@ -19,9 +21,6 @@ public class ProgressLink {
 	@Inject
 	private ProgressTaskManager taskManager;
 	
-	@Parameter
-	private ProgressTask task;
-	
 	@Inject
 	private AjaxResponseRenderer ajaxRenderer;
 	
@@ -30,6 +29,13 @@ public class ProgressLink {
 	
 	@Inject
 	private JavaScriptSupport jss;
+
+	@Parameter(required=true)
+	private ProgressTask task;
+	
+	@Parameter(required=true, defaultPrefix=BindingConstants.LITERAL)
+	@Property
+	private Block label;
 	
 	@Property
 	private String progressId;

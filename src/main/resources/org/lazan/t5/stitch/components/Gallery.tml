@@ -1,4 +1,12 @@
 <t:zone t:id="galleryZone" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd">
+	<div class="galleryControls">
+		<t:if test="showPrev">
+			<t:eventlink event="changePage" context="prevPage" zone="^"><button>${message:prevPage}</button></t:eventlink>
+		</t:if>
+		<t:if test="showNext">
+			<t:eventlink event="changePage" context="nextPage" zone="^"><button>${message:nextPage}</button></t:eventlink>
+		</t:if>
+	</div>
 	<table>
 		<tbody>
 			<tr t:type="loop" source="grid" value="row">
@@ -8,12 +16,4 @@
 			</tr>
 		</tbody>
 	</table>
-	<div class="galleryControls">
-		<t:if test="showPrev">
-			<t:eventlink event="changePage" context="prevPage" zone="^"><button>${message:prevPage}</button></t:eventlink>
-		</t:if>
-		<t:if test="showNext">
-			<t:eventlink event="changePage" context="nextPage" zone="^"><button>${message:nextPage}</button></t:eventlink>
-		</t:if>
-	</div>
 </t:zone>

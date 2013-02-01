@@ -1,0 +1,11 @@
+<t:zone t:id="tabsZone" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+	<t:delegate to="componentResources.body" />
+	<ul class="nav nav-tabs">
+		<t:loop source="tabModel.labelsById.entrySet()" value="tabEntry">
+		 	<li class="${tabClass}">
+		 		<t:eventlink event="tabChange" context="tabEntry.key" zone="^">${tabEntry.value}</t:eventlink>
+		 	</li>
+		</t:loop>
+	</ul>
+	<t:delegate to="activeTabBody" />
+</t:zone>

@@ -8,8 +8,8 @@ package org.lazan.t5.stitch.model;
  */
 public interface ProgressTask extends Runnable {
 	/**
-	 * Get the percentage complete of the task
-	 * @return a decimal between 0 and 1
+	 * Get the current progress of the task.
+	 * @return a decimal between 0 (not started) and 1 (complete)
 	 */
 	public float getProgress();
 }

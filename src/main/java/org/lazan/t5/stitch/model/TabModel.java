@@ -9,4 +9,8 @@ public class TabModel {
 	public Map<String, String> getLabelsById() {
 		return labelsById;
 	}
+	
+	public String getFirstId() {
+		return labelsById.keySet().iterator().next();
+	}
 }

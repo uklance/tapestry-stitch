@@ -2,7 +2,6 @@ package org.lazan.t5.stitch.components;
 
 import java.util.Map;
 
-import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.annotations.CleanupRender;
@@ -32,18 +31,14 @@ public class TabGroup {
 	@Property
 	private Map.Entry<String, String> tabEntry;
 	
-	@Parameter(required=true, defaultPrefix=BindingConstants.LITERAL)
+	@Parameter
 	private String active;
-	
-	@Property
-	private String mutableActive;
 	
 	@InjectComponent
 	private Zone tabsZone;
 	
 	@SetupRender
 	void setupRender() {
-		mutableActive = active;
 		setup();
 	}
 	
@@ -61,17 +56,19 @@ public class TabGroup {
 	}
 	
 	Block onTabChange(String tabId) {
-		mutableActive = tabId;
+		active = tabId;
 		setup();
-		return tabsZone.getBody();
+		return request.isXHR() ? tabsZone.getBody() : null;
 	}
 	
 	public String getTabClass() {
-		return tabEntry.getKey().equals(mutableActive) ? "active" : null;
+		String id = active == null ? tabModel.getFirstId() : active;
+		return tabEntry.getKey().equals(id) ? "active" : null;
 	}
 	
 	public Block getActiveTabBody() {
-		Component component = componentResources.getContainerResources().getEmbeddedComponent(mutableActive);
+		String id = active == null ? tabModel.getFirstId() : active;
+		Component component = componentResources.getContainerResources().getEmbeddedComponent(id);
 		return component.getComponentResources().getBody();
 	}
 }

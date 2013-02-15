@@ -9,14 +9,11 @@ import org.apache.tapestry5.ioc.internal.util.TapestryException;
 
 public class MapPropBinding extends AbstractBinding {
     private final Object root;
-
     private final PropertyConduit mapConduit;
-
     private final PropertyConduit keyConduit;
-
     private final String toString;
 
-    public MapPropBinding(final Location location, final Object root, final PropertyConduit mapConduit, final PropertyConduit keyConduit, final String toString) {
+    public MapPropBinding(Location location, Object root, PropertyConduit mapConduit, PropertyConduit keyConduit, String toString) {
         super(location);
         this.root = root;
         this.mapConduit = mapConduit;

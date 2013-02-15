@@ -63,7 +63,7 @@
 				<configuration>
 					<archive>
 						<manifestEntries>
-							<Tapestry-Module-Classes>org.lazan.t5.stitch.services.LazanComponentsModule</Tapestry-Module-Classes>
+							<Tapestry-Module-Classes>org.lazan.t5.stitch.services.StitchModule</Tapestry-Module-Classes>
 						</manifestEntries>
 					</archive>
 				</configuration>

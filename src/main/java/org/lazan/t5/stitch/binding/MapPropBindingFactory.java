@@ -23,7 +23,9 @@ public class MapPropBindingFactory implements BindingFactory {
 		this.interner = interner;
 	}
 	
-	public Binding newBinding(String description, ComponentResources container, ComponentResources component, String expression, Location location) {
+	public Binding newBinding(String description, ComponentResources container, ComponentResources component, 
+			String expression, Location location) 
+	{
         Object target = container.getComponent();
         Class<?> targetClass = target.getClass();
         
@@ -33,11 +35,8 @@ public class MapPropBindingFactory implements BindingFactory {
         	throw new TapestryException(msg, location, null);
         }
         
-        String mapExpression = matcher.group(1);
-        String mapKeyExpression = matcher.group(2);
-
-        PropertyConduit mapConduit = source.create(targetClass, mapExpression);
-        PropertyConduit keyConduit = source.create(targetClass, mapKeyExpression);
+        PropertyConduit mapConduit = source.create(targetClass, matcher.group(1));
+        PropertyConduit keyConduit = source.create(targetClass,  matcher.group(2));
 
         String toString = interner.format("MapPropBinding[%s %s(%s)]", description, container.getCompleteId(), expression);
 

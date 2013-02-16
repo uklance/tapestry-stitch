@@ -15,13 +15,17 @@ import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.services.javascript.InitializationPriority;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.lazan.t5.stitch.model.Syntax;
+import org.lazan.t5.stitch.services.SyntaxSource;
 
 @Import(library="prettify.js", stylesheet="prettify.css")
-public class SyntaxHighlight {
+public class Code {
 	@Inject
 	private JavaScriptSupport jss;
 	
-	@Parameter(required=true, defaultPrefix=BindingConstants.LITERAL)
+	@Inject
+	private SyntaxSource syntaxSource;
+	
+	@Parameter(defaultPrefix=BindingConstants.LITERAL)
 	private Syntax syntax;
 	
 	@Parameter(required=true, defaultPrefix=BindingConstants.ASSET)
@@ -29,14 +33,21 @@ public class SyntaxHighlight {
 	
 	@BeginRender
 	void beginRender(MarkupWriter writer) throws IOException {
-		writer.element("pre", "class", "prettyprint " + syntax.getCssClass());
-		writer.write(getSourceAsString().replaceAll("\t", "   "));
+		if (syntax == null) {
+			syntax = syntaxSource.getSyntax(source);
+		}
+		String cssClass = "prettyprint";
+		if (syntax.getCssClass() != null) {
+			cssClass += " " + syntax.getCssClass();
+		}
+		writer.element("pre", "class", cssClass);
+		writer.write(getSourceAsString());
 		writer.end();
 
 		jss.addScript(InitializationPriority.LATE, "prettyPrint()");
 	}
 	
-	private String getSourceAsString() throws IOException {
+	String getSourceAsString() throws IOException {
 		Reader reader = new InputStreamReader(source.getResource().openStream());
 		try {
 			StringBuilder builder = new StringBuilder();
@@ -45,7 +56,7 @@ public class SyntaxHighlight {
 			while ((length = reader.read(chars)) > 0) {
 				builder.append(chars, 0, length);
 			}
-			return builder.toString();
+			return builder.toString().replaceAll("\t", "   ");
 		} finally {
 			reader.close();
 		}

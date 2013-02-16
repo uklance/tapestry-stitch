@@ -3,7 +3,8 @@ package org.lazan.t5.stitch.model;
 public enum Syntax {
 	JAVA("lang-java"),
 	JAVASCRIPT("lang-js"),
-	XML("lang-xml");
+	XML("lang-xml"),
+	AUTO_DETECT(null);
 
 	private String cssClass;
 	

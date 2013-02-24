@@ -1,5 +1,5 @@
 <t:zone t:id="tabsZone" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
-	<t:delegate to="componentResources.body" />
+	<t:body />
 	<ul class="nav nav-tabs">
 		<t:loop source="tabModel.labelsById.entrySet()" value="tabEntry">
 		 	<li class="${tabClass}">

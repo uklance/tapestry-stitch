@@ -29,5 +29,6 @@ public class StitchModule {
 		config.add("xml", Syntax.XML);
 		config.add("js", Syntax.JAVASCRIPT);
 		config.add("java", Syntax.JAVA);
+		config.add("css", Syntax.CSS);
 	}
 }

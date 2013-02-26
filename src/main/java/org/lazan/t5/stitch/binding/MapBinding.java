@@ -7,13 +7,13 @@ import org.apache.tapestry5.internal.bindings.AbstractBinding;
 import org.apache.tapestry5.ioc.Location;
 import org.apache.tapestry5.ioc.internal.util.TapestryException;
 
-public class MapPropBinding extends AbstractBinding {
+public class MapBinding extends AbstractBinding {
     private final Object root;
     private final PropertyConduit mapConduit;
     private final PropertyConduit keyConduit;
     private final String toString;
 
-    public MapPropBinding(Location location, Object root, PropertyConduit mapConduit, PropertyConduit keyConduit, String toString) {
+    public MapBinding(Location location, Object root, PropertyConduit mapConduit, PropertyConduit keyConduit, String toString) {
         super(location);
         this.root = root;
         this.mapConduit = mapConduit;
@@ -21,7 +21,8 @@ public class MapPropBinding extends AbstractBinding {
         this.toString = toString;
     }
     
-    public Object get() {
+    @SuppressWarnings("rawtypes")
+	public Object get() {
     	try {
 	    	Map map = (Map) mapConduit.get(root);
 	    	if (map != null) {
@@ -34,7 +35,8 @@ public class MapPropBinding extends AbstractBinding {
         }
     }
     
-    @Override
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
     public void set(Object value) {
     	try {
 	    	Map map = (Map) mapConduit.get(root);
@@ -48,7 +50,8 @@ public class MapPropBinding extends AbstractBinding {
         }
     }
     
-    @Override
+    @SuppressWarnings("rawtypes")
+	@Override
     public Class getBindingType() {
     	return Object.class; 
     }

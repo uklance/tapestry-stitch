@@ -1,9 +1,9 @@
 <t:zone t:id="tabsZone" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
 	<t:body />
 	<ul class="nav nav-tabs">
-		<t:loop source="tabModel.labelsById.entrySet()" value="tabEntry">
+		<t:loop source="tabModel.labels" value="tabLabel" index="currentIndex">
 		 	<li class="${tabClass}">
-		 		<t:eventlink event="tabChange" context="tabEntry.key" zone="^">${tabEntry.value}</t:eventlink>
+		 		<t:eventlink event="tabChange" context="currentIndex" zone="^">${tabLabel}</t:eventlink>
 		 	</li>
 		</t:loop>
 	</ul>

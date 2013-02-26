@@ -12,12 +12,17 @@ import org.apache.tapestry5.ioc.internal.util.TapestryException;
 import org.apache.tapestry5.services.BindingFactory;
 import org.apache.tapestry5.services.PropertyConduitSource;
 
-public class MapPropBindingFactory implements BindingFactory {
+/**
+ * A two way binding backed by a property of type java.util.Map. The binding will get() and put() into the map
+ * Expressions are of the form map:mapexpression[keyExpression] where mapexpression and keyexpression are 
+ * normal tapestry property expressions
+ */
+public class MapBindingFactory implements BindingFactory {
 	private final PropertyConduitSource source;
 	private final StringInterner interner;
 	private static final Pattern EXPRESSION_PATTERN = Pattern.compile("^(.*)\\[(.*?)\\]$");
 
-	public MapPropBindingFactory(PropertyConduitSource source, StringInterner interner) {
+	public MapBindingFactory(PropertyConduitSource source, StringInterner interner) {
 		super();
 		this.source = source;
 		this.interner = interner;
@@ -40,6 +45,6 @@ public class MapPropBindingFactory implements BindingFactory {
 
         String toString = interner.format("MapPropBinding[%s %s(%s)]", description, container.getCompleteId(), expression);
 
-        return new MapPropBinding(location, target, mapConduit, keyConduit, toString);
+        return new MapBinding(location, target, mapConduit, keyConduit, toString);
 	}
 }

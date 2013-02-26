@@ -1,4 +1,4 @@
-package org.lazan.t5.stitch.services;
+package org.lazan.t5.stitch.services.internal;
 
 import java.util.Map;
 
@@ -6,6 +6,7 @@ import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.ioc.annotations.UsesMappedConfiguration;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.lazan.t5.stitch.model.Syntax;
+import org.lazan.t5.stitch.services.SyntaxSource;
 
 @UsesMappedConfiguration(key=String.class, value=Syntax.class)
 public class SyntaxSourceImpl implements SyntaxSource {

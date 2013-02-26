@@ -1,9 +1,6 @@
 package org.lazan.t5.stitch.components;
 
-import java.util.Map;
-
-import org.apache.tapestry5.Block;
-import org.apache.tapestry5.ComponentResources;
+import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.annotations.CleanupRender;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Parameter;
@@ -11,7 +8,8 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.runtime.Component;
+import org.apache.tapestry5.runtime.RenderCommand;
+import org.apache.tapestry5.runtime.RenderQueue;
 import org.apache.tapestry5.services.Request;
 import org.lazan.t5.stitch.model.TabModel;
 
@@ -25,28 +23,29 @@ public class TabGroup {
 	@Inject
 	private Request request;
 	
+	@InjectComponent
+	private Zone tabsZone;
+
 	@Property
 	private TabModel tabModel;
 	
-	@Property
-	private Map.Entry<String, String> tabEntry;
-	
 	@Parameter
-	private String active;
+	private Integer active;
 	
-	@InjectComponent
-	private Zone tabsZone;
+	@Property
+	private String tabLabel;
 	
+	@Property
+	private int currentIndex;
+
 	@SetupRender
 	void setupRender() {
-		setup();
+		// assume first tab is active if active parameter not specified
+		setup(active == null ? 0 : active);
 	}
 	
-	@Inject
-	private ComponentResources componentResources;
-	
-	void setup() {
-		tabModel = new TabModel();
+	void setup(int activeIndex) {
+		tabModel = new TabModel(activeIndex);
 		request.setAttribute(ATTRIBUTE_TAB_MODEL, tabModel);
 	}
 	
@@ -55,20 +54,21 @@ public class TabGroup {
 		request.setAttribute(ATTRIBUTE_TAB_MODEL, null);
 	}
 	
-	Block onTabChange(String tabId) {
-		active = tabId;
-		setup();
+	Object onTabChange(int activeIndex) {
+		active = activeIndex;
+		setup(activeIndex);
 		return request.isXHR() ? tabsZone.getBody() : null;
 	}
 	
 	public String getTabClass() {
-		String id = active == null ? tabModel.getFirstId() : active;
-		return tabEntry.getKey().equals(id) ? "active" : null;
+		return tabModel.getActiveTabIndex() == currentIndex ? "active" : null;
 	}
 	
-	public Block getActiveTabBody() {
-		String id = active == null ? tabModel.getFirstId() : active;
-		Component component = componentResources.getContainerResources().getEmbeddedComponent(id);
-		return component.getComponentResources().getBody();
+	public RenderCommand getActiveTabBody() {
+		return new RenderCommand() {
+			public void render(MarkupWriter writer, RenderQueue queue) {
+				writer.writeRaw(tabModel.getActiveTabBody());
+			}
+		};
 	}
 }

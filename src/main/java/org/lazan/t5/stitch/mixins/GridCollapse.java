@@ -27,45 +27,45 @@ public class GridCollapse {
 		if (collapseIndex < 0)  throw new RuntimeException("No such column " + collapseColumn);
 
 		Element parentTable = findTable(writer.getElement());
-		List<Node> rows = parentTable.find("tbody").getChildren();
+		List<Node> parentRows = parentTable.find("tbody").getChildren();
 		
 		boolean isFirst = true;
-		for (Node rowNode : rows) {
-			Element row = (Element) rowNode;
-			List<Node> parentCells = row.getChildren();
+		for (Node parentRowNode : parentRows) {
+			Element parentRow = (Element) parentRowNode;
+			List<Node> parentCells = parentRow.getChildren();
 			
 			Element parentCell = (Element) parentCells.get(collapseIndex);
 			Element childTable = findTable(parentCell);
 			
 			if (isFirst) {
 				// copy the header from the first child
-				flattenThead(collapseIndex, parentTable, childTable);
+				collapseHeaders(collapseIndex, parentTable, childTable);
 				isFirst = false;
 			}
 			
-			setRowSpans(collapseIndex, parentCells, childTable);
-			flattenTbody(row, parentCell, childTable);
+			setRowSpans(parentCells, childTable);
+			collapseBody(parentRow, parentCell, childTable);
 		}
 	}
 
 	/**
 	 * Move the cells from the child table to the parent table
 	 */
-	private void flattenTbody(Element row, Element parentCell, Element childTable) {
+	private void collapseBody(Element parentRow, Element parentCell, Element childTable) {
 		List<Node> childRows = childTable.find("tbody").getChildren();
 		
-		Element prevCollapsedRow = null;
-		for (Node collapseRowNode : childRows) {
-			Element collapseRow = (Element) collapseRowNode;
+		Element prevRow = null;
+		for (Node childRowNode : childRows) {
+			Element childRow = (Element) childRowNode;
 			
-			if (prevCollapsedRow == null) {
-				for (Node cell : collapseRow.getChildren()) {
+			if (prevRow == null) {
+				for (Node cell : childRow.getChildren()) {
 					cell.moveBefore(parentCell);
 				}
-				prevCollapsedRow = row;
+				prevRow = parentRow;
 			} else {
-				collapseRow.moveAfter(prevCollapsedRow);
-				prevCollapsedRow = collapseRow;
+				childRow.moveAfter(prevRow);
+				prevRow = childRow;
 			}
 		}
 		
@@ -75,7 +75,7 @@ public class GridCollapse {
 	/**
 	 * Move the headers from the child table to the parent table and remove the placeholder header
 	 */
-	private void flattenThead(int collapseIndex, Element parentTable, Element childTable) {
+	private void collapseHeaders(int collapseIndex, Element parentTable, Element childTable) {
 		List<Node> parentHeaderCells = getHeaderCells(parentTable);
 		List<Node> collapseHeaderCells = getHeaderCells(childTable);
 		Element parentHeader = (Element) parentHeaderCells.get(collapseIndex);
@@ -93,18 +93,14 @@ public class GridCollapse {
 	}
 	
 	/**
-	 * Set rowspans on all of the cells in the parent table (apart from the cell being collapsed)
+	 * Set rowspans on all of the cells in the parent table
 	 */
-	private void setRowSpans(int collapseIndex, List<Node> parentCells, Element childTable) {
+	private void setRowSpans(List<Node> parentCells, Element childTable) {
 		List<Node> childRows = childTable.find("tbody").getChildren();
 		String rowSpan = childRows.size() > 1 ? String.valueOf(childRows.size()) : null;
-		int cellIndex = 0;
 		for (Node parentCellNode : parentCells) {
 			Element parentCell = (Element) parentCellNode;
-			if (cellIndex != collapseIndex) {
-				parentCell.attribute("rowspan", rowSpan);
-			}
-			++ cellIndex;
+			parentCell.attribute("rowspan", rowSpan);
 		}
 	}
 	
@@ -116,6 +112,10 @@ public class GridCollapse {
 	private Element findTable(Element container) {
 		List<Node> topChildren = container.getChildren();
 		Element containingDiv = (Element) topChildren.get(topChildren.size() - 1);
-		return containingDiv.find("table");
+		Element table = containingDiv.find("table");
+		if (table == null) {
+			throw new RuntimeException("Could not find table element");
+		}
+		return table;
 	}
 }

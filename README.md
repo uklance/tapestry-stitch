@@ -11,4 +11,4 @@ Components:
 *   TabGroup - Ajax tab component using [twitter bootstrap tabs](http://twitter.github.com/bootstrap/javascript.html#tabs)
 *   ProgressLink - Fires a task and updates the progress in the UI. The task is executed asynchronously and is periodically polled for it's progress.
 
-A demonstration of each component can be found at https://github.com/uklance/tapestry-stitch-demo/
+See a live demo of the components [here](http://tapestry-stitch.uklance.cloudbees.net)

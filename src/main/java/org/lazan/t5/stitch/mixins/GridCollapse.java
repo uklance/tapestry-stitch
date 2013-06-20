@@ -111,8 +111,11 @@ public class GridCollapse {
 	 */
 	private Element findTable(Element container) {
 		List<Node> topChildren = container.getChildren();
-		Element containingDiv = (Element) topChildren.get(topChildren.size() - 1);
-		Element table = containingDiv.find("table");
+		Node topChild = topChildren.get(topChildren.size() - 1);
+		if (!(topChild instanceof Element)) {
+			throw new RuntimeException(String.format("Expected Element, found %s, (%s)", topChild.getClass(), topChild));
+		}
+		Element table = ((Element) topChild).find("table");
 		if (table == null) {
 			throw new RuntimeException("Could not find table element");
 		}

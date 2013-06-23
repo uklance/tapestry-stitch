@@ -20,6 +20,7 @@ public class GridCollapse {
 	@InjectContainer
 	private Grid grid;
 	
+	@SuppressWarnings("unchecked")
 	@CleanupRender
 	void cleanupRender(MarkupWriter writer) {
 		List<String> propertyNames = grid.getDataModel().getPropertyNames();
@@ -111,14 +112,16 @@ public class GridCollapse {
 	 */
 	private Element findTable(Element container) {
 		List<Node> topChildren = container.getChildren();
-		Node topChild = topChildren.get(topChildren.size() - 1);
-		if (!(topChild instanceof Element)) {
-			throw new RuntimeException(String.format("Expected Element, found %s, (%s)", topChild.getClass(), topChild));
+		if (topChildren.isEmpty()) {
+			throw new IllegalStateException(String.format("Element has no children (%s)", container));
 		}
-		Element table = ((Element) topChild).find("table");
-		if (table == null) {
-			throw new RuntimeException("Could not find table element");
+		Node lastChild = topChildren.get(topChildren.size() - 1);
+		if (lastChild instanceof Element) {
+			Element table = ((Element) lastChild).find("table");
+			if (table != null) {
+				return table;
+			}
 		}
-		return table;
+		throw new IllegalStateException(String.format("Could not find table (%s)", lastChild));
 	}
 }

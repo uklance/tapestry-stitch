@@ -8,6 +8,12 @@ import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.tree.TreeModel;
 import org.apache.tapestry5.tree.TreeNode;
 
+/**
+ * A {@link TreeModel} implementation that performs in constant time without
+ * needing to be stored in the session or as a singleton.
+ * 
+ * @author Lance
+ */
 public class LazyTreeModel<T> implements TreeModel<T> {
 	private final ValueEncoder<T> encoder;
 	private final LazyTreeModelSource<T> source;
@@ -30,7 +36,11 @@ public class LazyTreeModel<T> implements TreeModel<T> {
 		return new LazyTreeNode<T>(encoder, source, value);
 	}
 
-	public static <T> List<TreeNode<T>> createTreeNodes(ValueEncoder<T> encoder, LazyTreeModelSource<T> source, List<T> siblings) {
+	public static <T> List<TreeNode<T>> createTreeNodes(
+			ValueEncoder<T> encoder,
+			LazyTreeModelSource<T> source,
+			List<T> siblings)
+	{
 		if (siblings == null || siblings.isEmpty()) {
 			return Collections.emptyList();
 		}

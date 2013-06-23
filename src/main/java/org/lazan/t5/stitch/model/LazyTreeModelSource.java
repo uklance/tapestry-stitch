@@ -2,6 +2,11 @@ package org.lazan.t5.stitch.model;
 
 import java.util.List;
 
+/**
+ * Data source for a {@link LazyTreeModel}
+ * 
+ * @author Lance
+ */
 public interface LazyTreeModelSource<T> {
 	/**
 	 * Get the label from the value. Note: for efficiency this should be sourced

@@ -82,7 +82,7 @@ public class OnEvent {
 				throw new RuntimeException(
 						String.format("Illegal field '%s'. Fields can not contain '%s'", value, delemiter));
 			}
-			result.append(arr[i]);
+			result.append(value);
 		}
 		return result.toString();
 	}

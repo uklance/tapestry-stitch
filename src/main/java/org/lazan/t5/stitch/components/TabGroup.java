@@ -30,22 +30,19 @@ public class TabGroup {
 	private TabModel tabModel;
 	
 	@Parameter
-	private Integer active;
+	private String active;
 	
 	@Property
-	private String tabLabel;
-	
-	@Property
-	private int currentIndex;
+	private String currentName;
 
 	@SetupRender
 	void setupRender() {
 		// assume first tab is active if active parameter not specified
-		setup(active == null ? 0 : active);
+		setup();
 	}
 	
-	void setup(int activeIndex) {
-		tabModel = new TabModel(activeIndex);
+	void setup() {
+		tabModel = new TabModel(active);
 		request.setAttribute(ATTRIBUTE_TAB_MODEL, tabModel);
 	}
 	
@@ -54,14 +51,14 @@ public class TabGroup {
 		request.setAttribute(ATTRIBUTE_TAB_MODEL, null);
 	}
 	
-	Object onTabChange(int activeIndex) {
-		active = activeIndex;
-		setup(activeIndex);
+	Object onTabChange(String tabName) {
+		active = tabName;
+		setup();
 		return request.isXHR() ? tabsZone.getBody() : null;
 	}
 	
 	public String getTabClass() {
-		return tabModel.getActiveTabIndex() == currentIndex ? "active" : null;
+		return tabModel.isActive(currentName) ? "active" : null;
 	}
 	
 	public RenderCommand getActiveTabBody() {
@@ -70,5 +67,9 @@ public class TabGroup {
 				writer.writeRaw(tabModel.getActiveTabBody());
 			}
 		};
+	}
+	
+	public String getCurrentLabel() {
+		return tabModel.getLabel(currentName);
 	}
 }

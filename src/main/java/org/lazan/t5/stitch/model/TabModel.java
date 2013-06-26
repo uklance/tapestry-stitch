@@ -1,26 +1,25 @@
 package org.lazan.t5.stitch.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
  
 public class TabModel {
-	private List<String> labels = new ArrayList<String>();
+	private Map<String, String> labelsByName = new LinkedHashMap<String, String>();
 	private String activeTabBody;
-	private int activeTabIndex;
+	private String activeTabName;
 	
-	public TabModel(int activeTabIndex) {
+	public TabModel(String activeTabName) {
 		super();
-		this.activeTabIndex = activeTabIndex;
+		this.activeTabName = activeTabName;
 	}
-
-	/**
-	 * Add a label to the model and return the index of the current tab
-	 * @param label Label to display for the current tab
-	 * @return The index of the current tab
-	 */
-	public int addLabel(String label) {
-		labels.add(label);
-		return labels.size() - 1;
+	
+	public boolean containsName(String name) {
+		return labelsByName.containsKey(name);
+	}
+	
+	public void addTab(String name, String label) {
+		labelsByName.put(name, label);
 	}
 
 	public String getActiveTabBody() {
@@ -31,11 +30,22 @@ public class TabModel {
 		this.activeTabBody = activeTabBody;
 	}
 
-	public List<String> getLabels() {
-		return labels;
+	public boolean isActive(String name) {
+		boolean active = false;
+		if (activeTabName != null) {
+			active = activeTabName.equals(name);
+		} else if (!labelsByName.isEmpty()) {
+			String firstName =  labelsByName.keySet().iterator().next();
+			active = firstName.equals(name);
+		}
+		return active;
 	}
 	
-	public int getActiveTabIndex() {
-		return activeTabIndex;
+	public Collection<String> getNames() {
+		return labelsByName.keySet();
+	}
+	
+	public String getLabel(String name) {
+		return labelsByName.get(name);
 	}
 }

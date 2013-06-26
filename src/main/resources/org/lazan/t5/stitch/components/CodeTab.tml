@@ -1,0 +1,3 @@
+<t:stitch.tab name="prop:name" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd">
+	<t:stitch.code source="prop:source" /> 
+</t:stitch.tab>

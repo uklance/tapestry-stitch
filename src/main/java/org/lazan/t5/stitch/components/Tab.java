@@ -5,6 +5,7 @@ import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.annotations.AfterRenderBody;
 import org.apache.tapestry5.annotations.BeforeRenderBody;
 import org.apache.tapestry5.annotations.Parameter;
+import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.dom.Element;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
@@ -16,8 +17,12 @@ import org.lazan.t5.stitch.model.TabModel;
  */
 public class Tab {
 	@Parameter(required = true, defaultPrefix = BindingConstants.LITERAL)
+	@Property
+	private String name;
+
+	@Parameter(defaultPrefix = BindingConstants.LITERAL, value="prop:name")
 	private String label;
-	
+
 	@Inject 
 	private Request request;
 	
@@ -29,9 +34,13 @@ public class Tab {
 		if (tabModel == null) {
 			throw new IllegalStateException("Tab must be nested inside a TabGroup");
 		}
-		int tabIndex = tabModel.addLabel(label);
+		if (tabModel.containsName(name)) {
+			throw new IllegalStateException("Duplicate tab name " + name);
+		}
+			
+		tabModel.addTab(name, label);
 		
-		renderBody = (tabIndex == tabModel.getActiveTabIndex());
+		renderBody = tabModel.isActive(name);
 		if (renderBody) {
 			// add a container for the body
 			writer.element("div");

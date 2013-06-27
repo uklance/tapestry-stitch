@@ -10,11 +10,11 @@ import org.lazan.t5.stitch.services.SyntaxSource;
 
 @UsesMappedConfiguration(key=String.class, value=Syntax.class)
 public class SyntaxSourceImpl implements SyntaxSource {
-	private Map<String, Syntax> syntaxBySyffix;
+	private Map<String, Syntax> syntaxBySuffix;
 	
-	public SyntaxSourceImpl(Map<String, Syntax> syntaxBySyffix) {
+	public SyntaxSourceImpl(Map<String, Syntax> syntaxBySuffix) {
 		super();
-		this.syntaxBySyffix = CollectionFactory.newCaseInsensitiveMap(syntaxBySyffix);
+		this.syntaxBySuffix = CollectionFactory.newCaseInsensitiveMap(syntaxBySuffix);
 	}
 
 	public Syntax getSyntax(Asset source) {
@@ -23,7 +23,7 @@ public class SyntaxSourceImpl implements SyntaxSource {
 		Syntax syntax = null;
 		if (dotIndex != -1) {
 			String suffix = name.substring(dotIndex + 1);
-			syntax = syntaxBySyffix.get(suffix);
+			syntax = syntaxBySuffix.get(suffix);
 		}
 		return syntax == null ? Syntax.AUTO_DETECT : syntax;
 	}

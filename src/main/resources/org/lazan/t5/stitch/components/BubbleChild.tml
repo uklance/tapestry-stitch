@@ -1,0 +1,6 @@
+<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd">
+	<t:eventlink event="event1">Event1</t:eventlink><br />
+	<t:eventlink event="event2">Event2</t:eventlink><br />
+	<t:eventlink event="event3">Event3</t:eventlink><br />
+	<t:eventlink event="event4">Event4</t:eventlink><br />
+</div>

@@ -24,6 +24,14 @@ public class StitchModule {
 		config.addInstance("map", MapBindingFactory.class);
 	}
 	
+	public static void contributeFactoryDefaults(MappedConfiguration<String, String> config) {
+		config.add("stitch.pager.maxStartPages", "3");
+		config.add("stitch.pager.maxEndPages", "3");
+		config.add("stitch.pager.showPrevious", "true");
+		config.add("stitch.pager.showNext", "true");
+		config.add("stitch.pager.position", "bottom");
+	}
+	
 	public void contributeSyntaxSource(MappedConfiguration<String, Syntax> config) {
 		config.add("tml", Syntax.XML);
 		config.add("xml", Syntax.XML);

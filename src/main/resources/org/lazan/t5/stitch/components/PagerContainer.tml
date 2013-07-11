@@ -1,0 +1,9 @@
+<t:zone t:id="zone" id="${zoneId}" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+	<t:if test="position.matchTop">
+		<t:stitch.pager model="pagerModel" page="page" pageCount="pageCount" zone="zoneId" />
+	</t:if>
+	<t:body />
+	<t:if test="position.matchBottom">
+		<t:stitch.pager model="pagerModel" page="page" pageCount="pageCount" zone="zoneId" />
+	</t:if>
+</t:zone>

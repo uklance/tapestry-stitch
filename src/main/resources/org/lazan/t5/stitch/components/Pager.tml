@@ -1,0 +1,16 @@
+<div class="pagination" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+	<ul>
+		<t:if test="showPrev">
+			<li><t:eventlink event="page" context="[prevPage,zone]" zone="prop:zone">&laquo;</t:eventlink></li>
+		</t:if>
+		<t:loop source="pagerPages" value="pagerPage" index="index">
+			<t:if test="showSpacer">
+				<li class="disabled"><a href="#">${message:stitch.pager.spacer}</a></li>
+			</t:if>
+			<li class="${linkClass}"><t:eventlink event="page" context="[pagerPage,zone]" zone="prop:zone">${pagerPage}</t:eventlink></li>
+		</t:loop>
+		<t:if test="showNext">
+			<li><t:eventlink event="page" context="[nextPage,zone]" zone="prop:zone">&raquo;</t:eventlink></li>
+		</t:if>
+	</ul>
+</div>

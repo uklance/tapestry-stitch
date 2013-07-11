@@ -9,7 +9,7 @@ public class BubbleParent {
 	@Persist(PersistenceConstants.FLASH)
 	private String message;
 	
-	void onEvent1() {
-		message = "Event 1 fired on parent";
+	void onEvent1(int context) {
+		message = "Event 1 fired on parent, context = " + context;
 	}	
 }

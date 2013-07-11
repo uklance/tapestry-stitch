@@ -11,6 +11,14 @@ public class DefaultPagerModel implements PagerModel {
 	private final int showPreviousThreshold;
 	private final int showNextThreshold;
 	
+	/**
+	 * A default pager model implementation
+	 * @param minStartPages The minimum number of pages to display at the start of the pager
+	 * @param minEndPages The minimum number of pages to display at the end of the pager
+	 * @param currentBuffer Number of pages to display at either side of the current page
+	 * @param showPreviousThreshold Minimum number of pages before the previous link is displayed
+	 * @param showNextThreshold Minimum number of pages before the next link is displayed
+	 */
 	public DefaultPagerModel(int minStartPages, int minEndPages, int currentBuffer, int showPreviousThreshold, int showNextThreshold) {
 		super();
 		this.minStartPages = minStartPages;

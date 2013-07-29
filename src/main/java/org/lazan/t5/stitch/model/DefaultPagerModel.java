@@ -30,6 +30,8 @@ public class DefaultPagerModel implements PagerModel {
 	
 	public Collection<Integer> getPages(int currentPage, int pageCount) {
 		Set<Integer> pages = new TreeSet<Integer>();
+		
+		// we will always display the same number of pages
 		int requiredPages = minStartPages + minEndPages + 1 + (currentBuffer * 2);
 
 		if (pageCount <= requiredPages) {
@@ -39,10 +41,15 @@ public class DefaultPagerModel implements PagerModel {
 			addPages(pages, 1, minStartPages, 1);
 			addPages(pages, pageCount, minEndPages, -1);
 			if (currentPage <= minStartPages) {
+				// currentPage is within startPages
+				// add extra pages to the start
 				addPages(pages, minStartPages + 1, bufferPages, 1);
 			} else if (currentPage >= pageCount - minEndPages) {
+				// currentPage is within the endPages
+				// add extra pages to the end
 				addPages(pages, pageCount - minEndPages, bufferPages, -1);
 			} else {
+				// add buffer pages around currentPage
 				int start = Math.max(minStartPages + 1, currentPage - currentBuffer);
 				addPages(pages, start, bufferPages, 1);
 			}

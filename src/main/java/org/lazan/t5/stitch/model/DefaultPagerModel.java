@@ -30,7 +30,10 @@ public class DefaultPagerModel implements PagerModel {
 	
 	public Collection<Integer> getPages(int currentPage, int pageCount) {
 		Set<Integer> pages = new TreeSet<Integer>();
-		
+		if(pageCount == 1) {
+                      // we will not show pager when only one page
+                      return pages;
+                }
 		// we will always display the same number of pages
 		int requiredPages = minStartPages + minEndPages + 1 + (currentBuffer * 2);
 
@@ -65,10 +68,10 @@ public class DefaultPagerModel implements PagerModel {
 	}
 	
 	public boolean isShowNext(int currentpage, int pageCount) {
-		return pageCount >= showNextThreshold;
+		return pageCount >= showNextThreshold && currentpage != pageCount;
 	}
 	
 	public boolean isShowPrevious(int currentpage, int pageCount) {
-		return pageCount >= showPreviousThreshold;
+		return pageCount >= showPreviousThreshold && currentpage != 1;
 	}
 }

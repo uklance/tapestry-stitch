@@ -8,24 +8,34 @@ public class DefaultPagerModel implements PagerModel {
 	private final int minStartPages;
 	private final int minEndPages;
 	private final int currentBuffer;
-	private final int showPreviousThreshold;
-	private final int showNextThreshold;
+	private final int prevThreshold;
+	private final int nextThreshold;
 	
+	/**
+	 * A default pager model implementation
+	 * @param minEndPages The minimum number of pages to display at the start and end of the pager
+	 * @param currentBuffer Number of pages to display at either side of the current page
+	 * @param nextPrevThreshold Minimum number of pages before the next and previous links are displayed
+	 */
+	public DefaultPagerModel(int minEndPages, int currentBuffer, int nextPrevThreshold) {
+		this(minEndPages, minEndPages, currentBuffer, nextPrevThreshold, nextPrevThreshold);
+	}
+
 	/**
 	 * A default pager model implementation
 	 * @param minStartPages The minimum number of pages to display at the start of the pager
 	 * @param minEndPages The minimum number of pages to display at the end of the pager
 	 * @param currentBuffer Number of pages to display at either side of the current page
-	 * @param showPreviousThreshold Minimum number of pages before the previous link is displayed
-	 * @param showNextThreshold Minimum number of pages before the next link is displayed
+	 * @param prevThreshold Minimum number of pages before the previous link is displayed
+	 * @param nextThreshold Minimum number of pages before the next link is displayed
 	 */
-	public DefaultPagerModel(int minStartPages, int minEndPages, int currentBuffer, int showPreviousThreshold, int showNextThreshold) {
+	public DefaultPagerModel(int minStartPages, int minEndPages, int currentBuffer, int prevThreshold, int nextThreshold) {
 		super();
 		this.minStartPages = minStartPages;
 		this.minEndPages = minEndPages;
 		this.currentBuffer = currentBuffer;
-		this.showPreviousThreshold = showPreviousThreshold;
-		this.showNextThreshold = showNextThreshold;
+		this.prevThreshold = prevThreshold;
+		this.nextThreshold = nextThreshold;
 	}
 	
 	public Collection<Integer> getPages(int currentPage, int pageCount) {
@@ -64,11 +74,11 @@ public class DefaultPagerModel implements PagerModel {
 		}
 	}
 	
-	public boolean isShowNext(int currentpage, int pageCount) {
-		return pageCount >= showNextThreshold;
+	public boolean isShowNext(int currentPage, int pageCount) {
+		return currentPage < pageCount && pageCount >= nextThreshold;
 	}
 	
-	public boolean isShowPrevious(int currentpage, int pageCount) {
-		return pageCount >= showPreviousThreshold;
+	public boolean isShowPrevious(int currentPage, int pageCount) {
+		return currentPage > 1 && pageCount >= prevThreshold;
 	}
 }

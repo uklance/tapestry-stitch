@@ -14,7 +14,6 @@ import org.apache.tapestry5.corelib.data.GridPagerPosition;
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.grid.SortConstraint;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.lazan.t5.stitch.model.PagerModel;
@@ -43,18 +42,6 @@ public class PagerContainer {
 	
 	@InjectComponent
 	private Zone zone;
-	
-	@Inject @Symbol("stitch.pager.maxStartPages")
-	private int maxStartPages;
-
-	@Inject @Symbol("stitch.pager.maxEndPages")
-	private int maxEndPages;
-	
-	@Inject @Symbol("stitch.pager.showPrevious")
-	private boolean showPrevious;
-
-	@Inject @Symbol("stitch.pager.showNext")
-	private boolean showNext;
 	
 	@Property
 	private String zoneId;
@@ -92,12 +79,7 @@ public class PagerContainer {
 		pageCount = (int) Math.ceil(1d * size / pageSize);
 		pageSource = tempPageSource;
 	}
-	/*
-	PagerModel defaultPagerModel() {
-		return new DefaultPagerModel(maxStartPages, maxEndPages, showPrevious, showNext);
-	}
-	*/
-	
+
 	Block onPage(int page, String zoneId) {
 		this.page = page;
 		this.zoneId = zoneId;

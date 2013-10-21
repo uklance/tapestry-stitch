@@ -5,7 +5,7 @@ T5.extendInitializers({
 			if (spec.fieldIds) {
 				for (var i = 0; i < spec.fieldIds.length; ++i) {
 					var fieldId = spec.fieldIds[i];
-					var paramName = "onEvent." + fieldId;
+					var paramName = "onEvent" + i;
 					var paramValue = $(fieldId).getValue();
 					params[paramName] = paramValue;
 				}

@@ -19,16 +19,14 @@ import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
 @Import(library = "OnEvent.js")
 public class OnEvent {
-	public static final String FIELD_DELIMITER = ",";
-	
 	@Parameter(required=true, defaultPrefix=BindingConstants.LITERAL)
 	private String event;
 	
-	@Parameter(required=true, defaultPrefix=BindingConstants.LITERAL)
-	private String zone;
-	
 	@Parameter(defaultPrefix=BindingConstants.LITERAL)
 	private String clientEvent;
+	
+	@Parameter(required=true, defaultPrefix=BindingConstants.LITERAL)
+	private String zone;
 	
 	@Parameter
 	private Object context;
@@ -49,56 +47,47 @@ public class OnEvent {
 	private Request request;
 	
 	void afterRender() {
-		String[] fieldIdsConfig;
-		if (fields != null) {
-			fieldIdsConfig = fields;
-		} else if (container instanceof Field) {
-			fieldIdsConfig = new String[] { container.getClientId() };
-		} else {
-			fieldIdsConfig = new String[0];
-		}
-		String csvFieldIds = delimit(fieldIdsConfig, FIELD_DELIMITER);
-		String urlConfig = resources.createEventLink("clientEvent", event, context, csvFieldIds).toURI();
-		String clientEventConfig = clientEvent == null ? event : clientEvent;
+		String[] calculatedFields = getFields();
+		int fieldCount = calculatedFields == null ? 0 : calculatedFields.length;
+		String eventUrl = resources.createEventLink("clientEvent", event, context, fieldCount).toURI();
 		JSONObject spec = new JSONObject(
-			"url", urlConfig,
-			"event", clientEventConfig,
+			"url", eventUrl,
+			"event", getClientEvent(),
 			"id", container.getClientId(),
 			"zone", zone
 		);
-		if (fieldIdsConfig != null) {
-			spec.put("fieldIds", new JSONArray((Object[]) fieldIdsConfig));
+		if (calculatedFields != null) {
+			spec.put("fieldIds", new JSONArray((Object[]) calculatedFields));
 		}
 		
 		jss.addInitializerCall("onEvent", spec);
 	}
 	
-	private String delimit(String[] arr, String delemiter) {
-		StringBuilder result = new StringBuilder();
-		for (int i = 0; i < arr.length; ++ i) {
-			if (i != 0) result.append(delemiter);
-			String value = arr[i];
-			if (value.contains(delemiter)) {
-				throw new RuntimeException(
-						String.format("Illegal field '%s'. Fields can not contain '%s'", value, delemiter));
-			}
-			result.append(value);
-		}
-		return result.toString();
-	}
-
-	Object onClientEvent(String event, String context, String csvFieldIds) {
+	Object onClientEvent(String event, String context, int fieldCount) {
 		List<Object> contextValues = new ArrayList<Object>();
-		String[] fieldIds = csvFieldIds.split(FIELD_DELIMITER);
 		if (context != null) {
 			contextValues.add(context);
 		}
-		for (Object fieldId : fieldIds) {
-			String paramName = "onEvent." + fieldId;
+		for (int i = 0; i < fieldCount; ++ i) {
+			String paramName = "onEvent" + i;
 			contextValues.add(request.getParameter(paramName));
 		}
 		CaptureResultCallback<Object> callback = new CaptureResultCallback<Object>();
 		resources.triggerEvent(event, contextValues.toArray(), callback);
 		return callback.getResult();
+	}
+	
+	String getClientEvent() {
+		return clientEvent != null ? clientEvent : event;
+	}
+	
+	String[] getFields() {
+		if (fields != null) {
+			return fields;
+		}
+		if (container instanceof Field) {
+			return new String[] { container.getClientId() };
+		}
+		return null;
 	}
 }

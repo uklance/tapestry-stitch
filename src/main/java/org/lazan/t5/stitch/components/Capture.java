@@ -29,7 +29,7 @@ public class Capture {
 			throw new IllegalStateException("A 'handler' or a 'value' must be specified");
 		}
 		
-		// add a temp container to the DOM (this will be removed later
+		// add a temp container to the DOM (this will be removed later)
 		writer.element("container");
 	}
 	
@@ -38,7 +38,10 @@ public class Capture {
 		Element container = writer.getElement();
 		writer.end();
 		String markup = container.getChildMarkup();
+		
+		// remove the temp container
 		container.remove();
+		
 		if (handler != null) {
 			handler.handle(markup);
 		}

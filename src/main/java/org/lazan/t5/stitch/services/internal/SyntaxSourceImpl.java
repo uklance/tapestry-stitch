@@ -14,7 +14,8 @@ public class SyntaxSourceImpl implements SyntaxSource {
 	
 	public SyntaxSourceImpl(Map<String, Syntax> syntaxBySuffix) {
 		super();
-		this.syntaxBySuffix = CollectionFactory.newCaseInsensitiveMap(syntaxBySuffix);
+		this.syntaxBySuffix = CollectionFactory.newCaseInsensitiveMap();
+		this.syntaxBySuffix.putAll(syntaxBySuffix);
 	}
 
 	public Syntax getSyntax(Asset source) {

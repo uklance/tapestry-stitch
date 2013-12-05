@@ -1,15 +1,14 @@
 package org.lazan.t5.stitch.components;
 
 import org.apache.tapestry5.BindingConstants;
+import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.MarkupWriter;
-import org.apache.tapestry5.annotations.AfterRenderBody;
 import org.apache.tapestry5.annotations.BeforeRenderBody;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.dom.Element;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
-import org.lazan.t5.stitch.model.TabModel;
+import org.lazan.t5.stitch.model.TabGroupModel;
 
 /**
  * NB: I would have preferred to use an Environmental instead of a request attribute but I can't
@@ -26,37 +25,18 @@ public class Tab {
 	@Inject 
 	private Request request;
 	
-	private boolean renderBody;
+	@Inject
+	private ComponentResources resources;
 	
 	@BeforeRenderBody
 	boolean beforeRenderBody(MarkupWriter writer) {
-		TabModel tabModel = (TabModel) request.getAttribute(TabGroup.ATTRIBUTE_TAB_MODEL);
+		TabGroupModel tabModel = (TabGroupModel) request.getAttribute(TabGroup.ATTRIBUTE_MODEL);
 		if (tabModel == null) {
 			throw new IllegalStateException("Tab must be nested inside a TabGroup");
 		}
-		if (tabModel.containsName(name)) {
-			throw new IllegalStateException("Duplicate tab name " + name);
-		}
-			
-		tabModel.addTab(name, label);
+		tabModel.addTab(name, label, resources.getBody());
 		
-		renderBody = tabModel.isActive(name);
-		if (renderBody) {
-			// add a container for the body
-			writer.element("div");
-		}	
-		return renderBody;
-	}
-	
-	@AfterRenderBody
-	void afterRender(MarkupWriter writer) {
-		if (renderBody) {
-			// capture the body markup and remove it from the DOM, it will be rendered by the TabGroup
-			Element bodyWrapper = writer.getElement();
-			writer.end();
-			TabModel tabModel = (TabModel) request.getAttribute(TabGroup.ATTRIBUTE_TAB_MODEL);
-			tabModel.setActiveTabBody(bodyWrapper.getChildMarkup());
-			bodyWrapper.remove();
-		}
+		// don't render the body, it will be rendered by the TabGroup
+		return false;
 	}
 }

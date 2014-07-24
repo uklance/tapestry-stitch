@@ -1,6 +1,7 @@
 package org.lazan.t5.stitch.mixins;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.tapestry5.BindingConstants;
@@ -17,8 +18,13 @@ import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
-@Import(library = "OnEvent.js")
-public class OnEvent {
+/**
+ * This mixin allows you to observe any event (eg click, keypress) on any clientside element. The
+ * clientside event triggers a serverside event. You can pass an optional context and a configurable
+ * list of clientside field values to the serverside event.
+ */
+@Import(library = "Observe.js")
+public class Observe {
 	@Parameter(required=true, defaultPrefix=BindingConstants.LITERAL)
 	private String event;
 	
@@ -32,7 +38,7 @@ public class OnEvent {
 	private Object context;
 	
 	@Parameter
-	private String[] fields;
+	private List<String> fields;
 	
 	@Inject
 	private ComponentResources resources;
@@ -47,9 +53,8 @@ public class OnEvent {
 	private Request request;
 	
 	void afterRender() {
-		String[] calculatedFields = getFields();
-		int fieldCount = calculatedFields == null ? 0 : calculatedFields.length;
-		String eventUrl = resources.createEventLink("clientEvent", event, context, fieldCount).toURI();
+		List<String> calculatedFields = calculateFields();
+		String eventUrl = resources.createEventLink("clientEvent", event, context, calculatedFields.size()).toURI();
 		JSONObject spec = new JSONObject(
 			"url", eventUrl,
 			"event", getClientEvent(),
@@ -57,10 +62,10 @@ public class OnEvent {
 			"zone", zone
 		);
 		if (calculatedFields != null) {
-			spec.put("fieldIds", new JSONArray((Object[]) calculatedFields));
+			spec.put("fieldIds", new JSONArray(calculatedFields.toArray()));
 		}
 		
-		jss.addInitializerCall("onEvent", spec);
+		jss.addInitializerCall("observe", spec);
 	}
 	
 	Object onClientEvent(String event, String context, int fieldCount) {
@@ -69,7 +74,7 @@ public class OnEvent {
 			contextValues.add(context);
 		}
 		for (int i = 0; i < fieldCount; ++ i) {
-			String paramName = "onEvent" + i;
+			String paramName = "observe" + i;
 			contextValues.add(request.getParameter(paramName));
 		}
 		CaptureResultCallback<Object> callback = new CaptureResultCallback<Object>();
@@ -81,13 +86,13 @@ public class OnEvent {
 		return clientEvent != null ? clientEvent : event;
 	}
 	
-	String[] getFields() {
+	List<String> calculateFields() {
 		if (fields != null) {
 			return fields;
 		}
 		if (container instanceof Field) {
-			return new String[] { container.getClientId() };
+			return Collections.singletonList(container.getClientId());
 		}
-		return null;
+		return Collections.emptyList();
 	}
 }

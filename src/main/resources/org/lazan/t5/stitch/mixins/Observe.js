@@ -1,11 +1,11 @@
 T5.extendInitializers({
-	onEvent: function (spec) {
+	observe: function (spec) {
 		var element = $(spec.id).observe(spec.event, function () {
 			var params = {};
 			if (spec.fieldIds) {
 				for (var i = 0; i < spec.fieldIds.length; ++i) {
 					var fieldId = spec.fieldIds[i];
-					var paramName = "onEvent" + i;
+					var paramName = "observe" + i;
 					var paramValue = $(fieldId).getValue();
 					params[paramName] = paramValue;
 				}

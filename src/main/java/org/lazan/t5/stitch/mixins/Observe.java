@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.ClientElement;
 import org.apache.tapestry5.ComponentResources;
+import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.Field;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectContainer;
@@ -16,7 +17,9 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.ValueEncoderSource;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
+import org.lazan.t5.stitch.services.internal.StringEventContext;
 
 /**
  * This mixin allows you to observe any event (eg click, keypress) on any clientside element. The
@@ -52,9 +55,12 @@ public class Observe {
 	@Inject
 	private Request request;
 	
+	@Inject
+	private ValueEncoderSource valueEncoderSource;
+	
 	void afterRender() {
 		List<String> calculatedFields = calculateFields();
-		String eventUrl = resources.createEventLink("clientEvent", event, context, calculatedFields.size()).toURI();
+		String eventUrl = resources.createEventLink("observe", event, context, calculatedFields.size()).toURI();
 		JSONObject spec = new JSONObject(
 			"url", eventUrl,
 			"event", getClientEvent(),
@@ -68,8 +74,8 @@ public class Observe {
 		jss.addInitializerCall("observe", spec);
 	}
 	
-	Object onClientEvent(String event, String context, int fieldCount) {
-		List<Object> contextValues = new ArrayList<Object>();
+	Object onObserve(String event, String context, int fieldCount) {
+		List<String> contextValues = new ArrayList<String>();
 		if (context != null) {
 			contextValues.add(context);
 		}
@@ -78,7 +84,8 @@ public class Observe {
 			contextValues.add(request.getParameter(paramName));
 		}
 		CaptureResultCallback<Object> callback = new CaptureResultCallback<Object>();
-		resources.triggerEvent(event, contextValues.toArray(), callback);
+		EventContext eventContext = new StringEventContext(contextValues, valueEncoderSource);
+		resources.triggerContextEvent(event, eventContext, callback);
 		return callback.getResult();
 	}
 	

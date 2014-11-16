@@ -1,0 +1,22 @@
+<t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
+	<h3>Gallery</h3>
+	The <code>Gallery</code> component renders an X by Y cell <code>table</code> with ajax links
+	to the previous and next pages. The underlying <code>GalleryDataModel</code> supports paging.
+
+	<h3>Demo</h3>
+	<t:stitch.gallery source="images" columns="literal:3" rows="literal:2" value="image">
+		<p:valueBlock>
+			<img src="${image}" />
+		</p:valueBlock>
+	</t:stitch.gallery>
+	
+	<h3>Source</h3>
+	<t:stitch.tabGroup>
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/GalleryDemo.tml" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/GalleryDemo.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/model/GalleryDataModel.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/Gallery.tml" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/Gallery.java" />
+	</t:stitch.tabGroup>
+	
+</t:layout>

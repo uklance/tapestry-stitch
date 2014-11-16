@@ -1,0 +1,20 @@
+<t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
+	<h3>Code</h3>
+	The <code>Code</code> component uses the <a href="https://code.google.com/p/google-code-prettify/">google code prettify</a>
+	javascript library to render source code with syntax highlighting. If a <code>syntax</code> is not specified,
+	the <code>SyntaxSource</code> service will attempt to determine the syntax from the file extension.
+	
+	<h3>Demo</h3>
+	<t:stitch.code syntax="javascript" source="classpath:org/lazan/t5/stitch/components/ProgressLink.js" />
+	
+	<h3>Source</h3>
+	<t:stitch.tabGroup>
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/CodeDemo.tml" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/Code.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/model/Syntax.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/services/internal/SyntaxSourceImpl.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/services/StitchModule.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/prettify.js" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/prettify.css" />
+	</t:stitch.tabGroup>
+</t:layout>

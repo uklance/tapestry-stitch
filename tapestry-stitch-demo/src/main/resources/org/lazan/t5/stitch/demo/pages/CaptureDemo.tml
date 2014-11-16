@@ -1,0 +1,36 @@
+<t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
+	<h3>Capture</h3>
+	Sometimes you want to render a tapestry template to a String instead of directly to the DOM.
+	One example of this is when you want to use the markup string in javascript. The <code>Capture</code>
+	component captures it's body markup as it renders and updates either the <code>value</code>
+	or <code>handler</code> parameters that you pass to it (or both).
+	
+	<h3>Demo</h3>
+	This page demonstrates using the <code>capture</code> component to capture markup during
+	page render and ajax update. The captured markup is displayed in a javascript <code>alert</code>.
+	
+	<br /><br />
+	<t:eventlink event="ajaxEvent" zone="dummyZone">
+		<div class="btn btn-primary">Ajax Capture</div>
+	</t:eventlink>
+
+	<t:stitch.capture value="countToFive">
+		Counting to five during page render: <t:loop source="1..5" value="current">${current} </t:loop>
+	</t:stitch.capture>
+	
+	<t:block t:id="captureBlock">
+		<t:stitch.capture handler="countToTenHandler">
+			Counting to ten during ajax update: <t:loop source="1..10" value="current">${current} </t:loop>
+		</t:stitch.capture>
+	</t:block>
+
+	<t:zone t:id="dummyZone" />
+
+	<h3>Source</h3>
+	<t:stitch.tabGroup>
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/CaptureDemo.tml" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/CaptureDemo.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/Capture.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/model/MarkupHandler.java" />
+	</t:stitch.tabGroup>
+</t:layout>

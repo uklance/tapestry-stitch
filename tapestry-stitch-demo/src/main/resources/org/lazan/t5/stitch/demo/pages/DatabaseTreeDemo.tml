@@ -1,0 +1,67 @@
+<t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
+	<h3>Database Tree</h3>
+	The following is a demo of a
+	<a href="http://tapestry.apache.org/current/apidocs/org/apache/tapestry5/corelib/components/Tree.html">Tree</a> 
+	sourced by values from a database. The implementation uses
+	<a href="http://tapestry.apache.org/hibernate.html">Hibernate</a> to lookup <code>Category</code> and 
+	<code>Item</code> entities from an in memory database. A <code>Category</code> can contain child 
+	<code>Category</code> and <code>Item</code> instances. An <code>Item</code> does not have any children
+	and is considered a leaf.
+	
+	<h4>Why not DefaultTreeModel?</h4>
+	The <a href="http://tapestry.apache.org/current/apidocs/org/apache/tapestry5/tree/DefaultTreeModel.html">DefaultTreeModel</a>
+	works best when the model is stored between requests (in the <code>HTTPSession</code> or as a singleton).
+	The first time a node is expanded the <code>DefaultTreeModel</code> traverses from the roots
+	until it finds the node. Subsequent expand requests for the same node will use an indexed lookup from a cache.
+	Therefore the <code>DefaultTreeModel</code> will execute in
+	<a href="http://en.wikipedia.org/wiki/Time_complexity#Linear_time">linear time</a> the first time a node
+	is expanded and <a href="http://en.wikipedia.org/wiki/Time_complexity#Constant_time">constant time</a>
+	for the second and subsequent node expansions. Since performance is best when the entire tree is stored
+	in memory, the <code>DefaultTreeModel</code> may cause out of memory errors for large datasets.
+	
+	<h4>Why LazyTreeModel?</h4>
+	In contrast, the <code>LazyTreeModel</code> does not need to be stored between requests. Every time a node
+	is expanded, an id based lookup is performed from the underlying data source. The <code>LazyTreeModel</code>
+	can execute in <a href="http://en.wikipedia.org/wiki/Time_complexity#Constant_time">constant time</a>
+	through an indexed lookup so it is not necessary to store the model in the <code>HTTPSession</code> or as a singleton.
+	Since the entire tree is never stored in memory, out of memory errors will not occur for large datasets.
+	
+	<h3>Demo</h3>
+	<div class="row-fluid">
+		<div class="span8">
+			<t:tree model="treeModel" value="currentNode" expansionModel="expansionModel">
+				<p:label>
+					<t:if test="currentNode.leaf">
+						<t:eventlink event="itemSelected" context="currentNode.item" zone="itemZone">${currentNode.item.name}</t:eventlink>
+						<p:else>${currentNode.category.name}</p:else>
+					</t:if>
+				</p:label>
+			</t:tree>
+		</div>
+		<div class="span4">
+			<t:zone t:id="itemZone" />
+			<t:block t:id="itemBlock">
+				<div class=" alert alert-info">
+					<strong>Name:</strong> ${selectedItem.name}<br />
+					<strong>Price:</strong> £${selectedItem.price}<br />
+					<strong>Description:</strong> ${selectedItem.description}<br />
+				</div>
+			</t:block>
+		</div>
+	</div>
+		
+
+	<h3>Source</h3>
+	<t:stitch.tabGroup>
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/DatabaseTreeDemo.tml" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/DatabaseTreeDemo.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/model/ItemTreeSource.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/model/ItemTreeNode.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/entities/Item.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/entities/Category.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/services/ItemCreator.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/model/LazyTreeModel.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/model/LazyTreeNode.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/model/LazyTreeModelSource.java" />
+	</t:stitch.tabGroup>
+</t:layout>

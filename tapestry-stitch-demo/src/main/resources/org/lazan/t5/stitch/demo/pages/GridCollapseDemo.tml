@@ -1,0 +1,38 @@
+<t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
+	<h3>Grid Collapse</h3>
+	The <code>GridCollapse</code> mixin flattens a child grid nested within parent grid so that only a single table tag is rendered.
+	The column headings from the child grid are moved to the top level and appropriate <code>rowspan</code> attributes are added to
+	the parent grid cells. The mixin can be applied to multiple levels of parent / child grids. It's recommended to use this mixin
+	in conjunction with the <code>DisableSort</code> mixin so that sort links are not rendered on the child grids.
+	<h3>Demo</h3>
+	
+	<h4>Before applying the <code>GridCollapse</code> mixin</h4>
+	<t:grid source="countries" row="country" add="cities">
+		<p:citiesCell>
+			<t:grid source="country.cities" row="city" add="streets" t:mixins="stitch/DisableSort">
+				<p:streetsCell>
+					<t:grid source="city.streets" t:mixins="stitch/DisableSort" />
+				</p:streetsCell>
+			</t:grid>
+		</p:citiesCell>
+	</t:grid>
+
+	<h4>After applying the <code>GridCollapse</code> mixin</h4>
+	<t:grid source="countries" row="country" add="cities" t:mixins="stitch/GridCollapse" collapseColumn="cities">
+		<p:citiesCell>
+			<t:grid source="country.cities" row="city" add="streets" t:mixins="stitch/GridCollapse,stitch/DisableSort" collapseColumn="streets">
+				<p:streetsCell>
+					<t:grid source="city.streets" t:mixins="stitch/DisableSort" />
+				</p:streetsCell>
+			</t:grid>
+		</p:citiesCell>
+	</t:grid>
+
+	<h3>Source</h3>
+	<t:stitch.tabGroup>
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/GridCollapseDemo.tml" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/GridCollapseDemo.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/mixins/GridCollapse.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/mixins/DisableSort.java" />
+	</t:stitch.tabGroup>
+</t:layout>

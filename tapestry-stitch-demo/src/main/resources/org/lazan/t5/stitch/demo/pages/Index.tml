@@ -1,0 +1,4 @@
+<t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
+	<h3>Tapestry Stitch</h3>
+	Sample components and concepts in Apache Tapestry 5
+</t:layout>

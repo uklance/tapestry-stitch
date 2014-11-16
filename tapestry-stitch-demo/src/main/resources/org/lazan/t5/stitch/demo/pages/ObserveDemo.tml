@@ -1,0 +1,106 @@
+<t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
+	<h3>Observe Mixin</h3>
+	The <code>observe</code> mixin attaches to a client element and listens to a clientside event
+	(eg click, change, keyup etc). When the event fires on the element, the mixin fires a serverside event
+	via ajax and updates a <code>zone</code>. The mixin can pass any number of clientside field values
+	as well as a context to the serverside event.<br /><br />
+	
+	This mixin was inspired by the
+	<a href="http://jumpstart.doublenegative.com.au/jumpstart/examples/ajax/onevent">ZoneUpdater</a> mixin
+	from <a href="http://jumpstart.doublenegative.com.au/home.html">Tapestry JumpStart</a>
+	
+	<h4>Parameters:</h4>
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Required</th>
+				<th>Default</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>clientEvent</td>
+				<td>false</td>
+				<td>event</td>
+				<td>Clientside event to listen to</td>
+			</tr>
+			<tr>
+				<td>event</td>
+				<td>true</td>
+				<td></td>
+				<td>Serverside event to fire</td>
+			</tr>
+			<tr>
+				<td>context</td>
+				<td>false</td>
+				<td></td>
+				<td>If provided, this will be the first argument in the serverside event</td>
+			</tr>
+			<tr>
+				<td>fields</td>
+				<td>false</td>
+				<td>clientId of the container<br/>(if it's a field)</td>
+				<td>
+					List of field clientIds. When the clientside event fires, the current clientside field values will
+					be passed to the serverside event.
+				</td>
+			</tr>
+			<tr>
+				<td>zone</td>
+				<td>true</td>
+				<td></td>
+				<td>Zone to update</td>
+			</tr>
+		</tbody>
+	</table>	
+
+	<h3>Demo</h3>
+	<div class="row">
+	<div class="span5">
+	<t:form autofocus="literal:false">
+		<div class="alert alert-info">Select some filter values to filter the list of phones</div>
+
+		Brand: <t:any element="select" t:id="brand" t:mixins="stitch/observe" clientEvent="change" event="filter"
+		              zone="phonesZone" context="literal:brand" fields="['name','brand','color','maxPrice']">
+			<option value="">All</option>
+			<option value="APPLE">Apple</option>
+			<option value="SAMSUNG">Samsung</option>
+			<option value="NOKIA">Nokia</option>
+		</t:any><br />
+		
+		Name: <t:textfield t:id="name" t:mixins="stitch/observe" value="literal:" clientEvent="keyup" event="filter"
+		                   zone="phonesZone" context="literal:name" fields="['name','brand','color','maxPrice']" /><br />
+						   
+		Color: <t:any element="select" t:id="color" t:mixins="stitch/observe" clientEvent="change" event="filter"
+		              zone="phonesZone" context="literal:color" fields="['name','brand','color','maxPrice']">
+			<option value="">All</option>
+			<option value="RED">Red</option>
+			<option value="BLUE">Blue</option>
+			<option value="BLACK">Black</option>
+			<option value="WHITE">White</option>
+		</t:any><br />
+		Max Price: <t:textfield t:id="maxPrice" t:mixins="stitch/observe" value="literal:" clientEvent="keyup" event="filter"
+		                        zone="phonesZone" context="literal:maxPrice" fields="['name','brand','color','maxPrice']" /><br />
+		
+	</t:form>
+	</div>
+	<div class="span5">
+	<t:zone t:id="phonesZone">
+		<t:if test="message">
+			<div class="alert alert-info">${message}</div>
+		</t:if>
+		<t:grid source="phones" />
+	</t:zone>
+	</div>
+	</div>
+	<h3>Source</h3>
+	<t:stitch.tabGroup>
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/ObserveDemo.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/ObserveDemo.tml" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/mixins/Observe.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/mixins/Observe.js" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/services/internal/StringEventContext.java" />
+	</t:stitch.tabGroup>
+</t:layout>

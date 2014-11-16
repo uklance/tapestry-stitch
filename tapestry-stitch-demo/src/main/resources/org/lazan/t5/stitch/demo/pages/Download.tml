@@ -1,0 +1,12 @@
+<t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
+	<h3>Download</h3>
+	<p>
+		The tapestry-stitch component library can be downloaded from:<br />
+		<a href="https://github.com/uklance/tapestry-stitch">https://github.com/uklance/tapestry-stitch</a>
+	</p>
+	
+	<p>
+		The tapestry-stitch-demo can be downloaded from:<br />
+		<a href="https://github.com/uklance/tapestry-stitch-demo">https://github.com/uklance/tapestry-stitch-demo</a>
+	</p>
+</t:layout>

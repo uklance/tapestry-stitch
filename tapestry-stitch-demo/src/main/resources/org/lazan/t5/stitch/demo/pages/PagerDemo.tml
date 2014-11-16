@@ -1,0 +1,24 @@
+<t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
+	<h3>Pager</h3>
+
+	<h3>Demo</h3>
+	<t:stitch.pagercontainer source="allRecords" pageSource="pageRecords" page="page" pageSize="literal:10" pagerModel="pagerModel">
+		<ul>
+			<t:loop source="pageRecords" value="record">
+				<li>${record}</li>
+			</t:loop>
+		</ul>
+	</t:stitch.pagercontainer>
+
+	<h3>Source</h3>
+	<t:stitch.tabGroup>
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/PagerDemo.tml" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/PagerDemo.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/PagerContainer.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/PagerContainer.tml" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/Pager.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/Pager.tml" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/model/PagerModel.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/model/DefaultPagerModel.java" />
+	</t:stitch.tabGroup>
+</t:layout>

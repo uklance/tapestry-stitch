@@ -1,0 +1,81 @@
+<t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd"
+	xmlns:p="tapestry:parameter" xmlns:fo="http://www.w3.org/1999/XSL/Format"
+	xmlns:fox="http://xml.apache.org/fop/extensions">
+
+	<h3>PDF Link</h3>
+	The <code>PDFLink</code> component renders a link which generates a PDF. The PDF is rendered by
+	<a href="http://xmlgraphics.apache.org/fop/">Apache FOP</a> which transforms a FO
+	<a href="http://tapestry.apache.org/current/apidocs/org/apache/tapestry5/Block.html">block</a>.
+	This is a different to normal FOP usage where XSLT is used to generate FO. The <code>PDFLink</code> component
+	allows tapestry users to specify FO in a tapestry
+	<a href="http://tapestry.apache.org/component-templates.html">component template</a> instead.
+
+	<h3>Demo</h3>
+	<t:stitch.pdflink label="Download PDF" fileName="literal:myPdf.pdf">
+		<p:fo><t:delegate to="block:pdfFo" /></p:fo>
+	</t:stitch.pdflink>
+	
+	<t:block t:id="pdfFo">
+		<fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format">
+			<fo:layout-master-set>
+				<fo:simple-page-master master-name="first"
+					margin-right="1.5cm" margin-left="1.5cm" margin-bottom="2cm"
+					margin-top="1cm" page-width="21cm" page-height="29.7cm">
+					<fo:region-body margin-top="1cm" />
+					<fo:region-before extent="1cm" />
+					<fo:region-after extent="1.5cm" />
+				</fo:simple-page-master>
+			</fo:layout-master-set>
+
+			<fo:page-sequence master-reference="first">
+				<fo:flow flow-name="xsl-region-body">
+					<fo:block text-align="center">
+						<fo:external-graphic src="${chartURI}"></fo:external-graphic>
+					</fo:block>					
+
+					<fo:table border-collapse="collapse" table-layout="fixed">
+						<fo:table-column column-width="3cm" />
+						<fo:table-column column-width="10cm" />
+						<fo:table-column column-width="3cm" />
+
+						<fo:table-body>
+							<fo:table-row>
+								<fo:table-cell border-color="blue" border-width="0.5pt" border-style="solid">
+									<fo:block text-align="center">Rank</fo:block>
+								</fo:table-cell>
+								<fo:table-cell border-color="blue" border-width="0.5pt" border-style="solid">
+									<fo:block text-align="center">Country</fo:block>
+								</fo:table-cell>
+								<fo:table-cell border-color="blue" border-width="0.5pt" border-style="solid">
+									<fo:block text-align="center">Population</fo:block>
+								</fo:table-cell>
+							</fo:table-row>
+							<t:loop source="countryStats" value="stats">
+								<fo:table-row>
+									<fo:table-cell border-color="blue" border-width="0.5pt" border-style="solid">
+										<fo:block text-align="center">${stats.rank}</fo:block>
+									</fo:table-cell>
+									<fo:table-cell border-color="blue" border-width="0.5pt" border-style="solid">
+										<fo:block text-align="center">${stats.country}</fo:block>
+									</fo:table-cell>
+									<fo:table-cell border-color="blue" border-width="0.5pt" border-style="solid">
+										<fo:block text-align="center">${stats.population}</fo:block>
+									</fo:table-cell>
+								</fo:table-row>
+							</t:loop>
+						</fo:table-body>
+					</fo:table>
+				</fo:flow>
+			</fo:page-sequence>
+		</fo:root>
+	</t:block>
+	
+	
+	<h3>Source</h3>
+	<t:stitch.tabGroup>
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/PDFLinkDemo.tml" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/PDFLinkDemo.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/PDFLink.tml" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/PDFLink.java" />
+	</t:stitch.tabGroup>
+</t:layout>

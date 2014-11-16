@@ -1,0 +1,15 @@
+<t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
+	<h3>Demo</h3>
+	<t:stitch.bubbleparent />
+		
+	<h3>Source</h3>
+	<t:stitch.tabGroup>
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/EventBubbleDemo.tml" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/EventBubbleDemo.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/BubbleParent.tml" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/BubbleParent.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/BubbleChild.tml" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/BubbleChild.java" />
+	</t:stitch.tabGroup>
+	
+</t:layout>

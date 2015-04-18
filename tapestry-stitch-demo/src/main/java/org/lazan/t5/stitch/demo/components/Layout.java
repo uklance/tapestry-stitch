@@ -17,7 +17,8 @@ public class Layout {
 			new MenuItem("PDF Link", "PDFLinkDemo"),
 			new MenuItem("Code", "CodeDemo"),
 			new MenuItem("Pager", "PagerDemo"),
-			new MenuItem("Capture", "CaptureDemo")
+			new MenuItem("Capture", "CaptureDemo"),
+			new MenuItem("Parallel", "ParallelDemo")
 		),
 		new MenuGroup("Mixins",
 			new MenuItem("Grid Decorator", "GridDecoratorDemo"),

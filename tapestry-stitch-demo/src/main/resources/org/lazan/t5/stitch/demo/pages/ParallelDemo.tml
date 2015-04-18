@@ -1,0 +1,62 @@
+<t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
+	<h3>Parallel Rendering</h3>
+	
+	The parallel component works with the parallelContainer component to perform work in parallel. Any
+	long running tasks should be performed by the <code>Invokable</code> which ultimately updates a binding.
+	The binding can then be referenced in the body of the parallel instance. It's important to note that the
+	worker will be invoked in parallel so many thread scoped services will be null when the worker is invoked (eg the request).
+	
+	<h4>Parameters:</h4>
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Required</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>worker</td>
+				<td>true</td>
+				<td>A long running task which returns a value. This will be invoked in parallel</td>
+			</tr>
+			<tr>
+				<td>binding</td>
+				<td>true</td>
+				<td>
+					This will usually be a property defined in your page. 
+					The property will be updated with the worker's result.
+					The body of the parallel instance should reference the binding in some way
+				</td>
+			</tr>
+		</tbody>
+	</table>	
+
+	<h3>Demo</h3>
+	
+	<ul>
+		<t:stitch.parallelContainer>
+			<t:stitch.parallel worker="worker1" binding="property1">
+				<li>First value is: ${property1}</li>
+			</t:stitch.parallel>
+			<t:stitch.parallel worker="worker2" binding="property2">
+				<li>Second value is: ${property2}</li>
+			</t:stitch.parallel>
+			<t:stitch.parallel worker="worker3" binding="property3">
+				<li>Third value is: ${property3}</li>
+			</t:stitch.parallel>
+		</t:stitch.parallelContainer>
+	</ul>
+	Rendered 3 x 1 second tasks in ${renderSeconds} seconds using a maximum of ${maxThreadPoolSize} threads.
+	
+	<h3>Source</h3>
+	<t:stitch.tabGroup>
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/ParallelDemo.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/ParallelDemo.tml" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/Parallel.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/ParallelContainer.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/model/ParallelModel.java" />
+		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/model/ParallelContainerModel.java" />
+	</t:stitch.tabGroup>
+</t:layout>

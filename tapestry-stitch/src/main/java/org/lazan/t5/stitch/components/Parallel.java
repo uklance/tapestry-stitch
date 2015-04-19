@@ -21,6 +21,10 @@ import org.lazan.t5.stitch.model.ParallelContainerModel;
 import org.lazan.t5.stitch.model.ParallelModel;
 import org.slf4j.Logger;
 
+/**
+ * Works in concert with the {@link ParallelContainer} to perform work in parallel. The rendering
+ * of the body is delayed until the {@link ParallelContainer} finishes rendering.
+ */
 public class Parallel {
 	@Parameter(required=true)
 	private Object binding;
@@ -42,7 +46,7 @@ public class Parallel {
 	
 	@SetupRender
 	public boolean setupRender(MarkupWriter writer) {
-		// temp element will be removed later
+		// placeholder element will be removed later
 		final Element placeholder = writer.element("div");
 		writer.end();
 		
@@ -52,6 +56,9 @@ public class Parallel {
 				return Parallel.this.worker;
 			}
 
+			/**
+			 * Fired by the parallelContainer
+			 */
 			@Override
 			public void onWorkerValue(Object value) {
 				Parallel.this.binding = value;
@@ -68,7 +75,7 @@ public class Parallel {
 		
 		containerModel.add(model);
 		
-		// returning false causes stops the body block from rendering here
+		// returning false stops the body from rendering here
 		return false;
 	}
 
@@ -78,7 +85,7 @@ public class Parallel {
 		RenderCommand renderCommand = typeCoercer.coerce(bodyBlock, RenderCommand.class);
 		MarkupWriter writer = new MarkupWriterImpl();
 		
-		// this element is discarded
+		// root element will be discarded
 		Element root = writer.element("div");
 
 		RenderQueueImpl queue = new RenderQueueImpl(logger);

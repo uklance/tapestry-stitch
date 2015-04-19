@@ -1,16 +1,19 @@
 <t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
 	<h3>Parallel Rendering</h3>
 	
-	The parallel component works with the parallelContainer component to perform work in parallel. Any
-	long running tasks should be performed by the <code>Invokable</code> which ultimately updates a binding.
-	The binding can then be referenced in the body of the parallel instance. It's important to note that the
-	worker will be invoked in parallel so many thread scoped services will be null when the worker is invoked (eg the request).
+	The <code>parallel</code> component works with the <code>parallelContainer</code> component to perform 
+	work in parallel. Long running tasks can be performed by the <code>worker</code>, an instance of 
+	<a href="http://tapestry.apache.org/current/apidocs/org/apache/tapestry5/ioc/Invokable.html">Invokable</a>.
+	Once the worker returns a value, the <code>binding</code> will be updated prior to rendering the body of the 
+	<code>parallel</code> instance. It's important to note that the <code>worker</code> will be invoked in 
+	parallel so many thread scoped services will be null as it executes (eg the request).
 	
 	<h4>Parameters:</h4>
 	<table class="table table-bordered">
 		<thead>
 			<tr>
 				<th>Name</th>
+				<th>Type</th>
 				<th>Required</th>
 				<th>Description</th>
 			</tr>
@@ -18,11 +21,13 @@
 		<tbody>
 			<tr>
 				<td>worker</td>
+				<td><a href="http://tapestry.apache.org/current/apidocs/org/apache/tapestry5/ioc/Invokable.html">Invokable</a></td>
 				<td>true</td>
 				<td>A long running task which returns a value. This will be invoked in parallel</td>
 			</tr>
 			<tr>
 				<td>binding</td>
+				<td>Object</td>
 				<td>true</td>
 				<td>
 					This will usually be a property defined in your page. 

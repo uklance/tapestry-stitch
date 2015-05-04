@@ -1,15 +1,15 @@
 <t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
 	<h3>Parallel Rendering</h3>
 	
-	The <code>parallel</code> component works together with the <code>parallelContainer</code> component to perform 
-	work on a different thread(s). This is done by delaying the rendering of the <code>parallel's</code> body until
-	later, allowing all parallel workers defined inside a <code>parallelContainer</code> to run at the same time using the 
+	The <code>parallel</code> component works together with the <code>parallelContainer</code> to perform 
+	work on thread pool. This is done by delaying the rendering of the body until later, allowing all workers defined 
+	inside a <code>parallelContainer</code> to run at the same time using the 
 	<a href="http://tapestry.apache.org/current/apidocs/org/apache/tapestry5/ioc/services/ParallelExecutor.html">ParallelExecutor</a>.
 	Long running tasks can be performed by the <code>worker</code>, an instance of 
 	<a href="http://tapestry.apache.org/current/apidocs/org/apache/tapestry5/ioc/Invokable.html">Invokable</a>.
-	The worker's result is used to set a <code>binding</code> which can be referenced by the body of the <code>parallel</code> instance. 
-	It's important to note that the <code>worker</code> will NOT be invoked by the request thread so many thread scoped services 
-	will be null as it executes (eg the request).
+	The worker will eventually return a result which populates a <code>binding</code> before rendering the body 
+	of the <code>parallel</code> instance. It's important to note that the <code>worker</code> will NOT be invoked by the request
+	thread so many thread scoped services will be null as it executes (eg the request and session etc).
 	
 	<h4>Parameters:</h4>
 	<table class="table table-bordered">

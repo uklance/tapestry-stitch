@@ -26,9 +26,6 @@ public class ParallelDemo {
 	private String rowValue;
 
 	@Property
-	private String parallelRowValue;
-	
-	@Property
 	private Integer rowIndex;
 	
 	private long startMillis;
@@ -46,7 +43,7 @@ public class ParallelDemo {
 	}
 	
 	/**
-	 * Creates an invokable which pauses for a second before returning the rowValue
+	 * Creates an invokable which pauses for 2 seconds before returning the rowValue
 	 */
 	public Invokable<String> createRowWorker() {
 		final String valueSnapshot = rowValue;

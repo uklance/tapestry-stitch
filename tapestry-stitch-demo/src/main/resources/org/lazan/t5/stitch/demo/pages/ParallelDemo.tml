@@ -1,12 +1,15 @@
 <t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
 	<h3>Parallel Rendering</h3>
 	
-	The <code>parallel</code> component works with the <code>parallelContainer</code> component to perform 
-	work in parallel. Long running tasks can be performed by the <code>worker</code>, an instance of 
+	The <code>parallel</code> component works together with the <code>parallelContainer</code> component to perform 
+	work on a different thread(s). This is done by delaying the rendering of the <code>parallel's</code> body until
+	later, allowing all parallel workers defined inside a <code>parallelContainer</code> to run at the same time using the 
+	<a href="http://tapestry.apache.org/current/apidocs/org/apache/tapestry5/ioc/services/ParallelExecutor.html">ParallelExecutor</a>.
+	Long running tasks can be performed by the <code>worker</code>, an instance of 
 	<a href="http://tapestry.apache.org/current/apidocs/org/apache/tapestry5/ioc/Invokable.html">Invokable</a>.
-	Once the worker returns a value, the <code>binding</code> will be updated prior to rendering the body of the 
-	<code>parallel</code> instance. It's important to note that the <code>worker</code> will be invoked in 
-	parallel so many thread scoped services will be null as it executes (eg the request).
+	The worker's result is used to set a <code>binding</code> which can be referenced by the body of the <code>parallel</code> instance. 
+	It's important to note that the <code>worker</code> will NOT be invoked by the request thread so many thread scoped services 
+	will be null as it executes (eg the request).
 	
 	<h4>Parameters:</h4>
 	<table class="table table-bordered">
@@ -39,22 +42,39 @@
 	</table>	
 
 	<h3>Demo</h3>
+	<p>
+	In the example below, each odd row is rendered in parallel by a worker that pauses for ${pauseSeconds} seconds. 
+	This causes the even rows to render before the odd rows. Placeholders are added for the odd rows which all render 
+	in parallel after the body of the <code>parallelContainer</code> is rendered.
+	</p>
 	
-	<ul>
-		<t:stitch.parallelContainer>
-			<t:stitch.parallel worker="worker1" binding="property1">
-				<li>First value is: ${property1}</li>
-			</t:stitch.parallel>
-			<t:stitch.parallel worker="worker2" binding="property2">
-				<li>Second value is: ${property2}</li>
-			</t:stitch.parallel>
-			<t:stitch.parallel worker="worker3" binding="property3">
-				<li>Third value is: ${property3}</li>
-			</t:stitch.parallel>
-		</t:stitch.parallelContainer>
-	</ul>
-	Rendered 3 x 1 second tasks in ${renderSeconds} seconds using a maximum of ${maxThreadPoolSize} threads.
-	
+	<t:stitch.parallelContainer>
+		<table class="table table-bordered table-striped">
+			<tr>
+				<th>Value</th>
+				<th>Render Order</th>
+				<th>Rendered at</th>
+			</tr>
+			<tr t:type="loop" source="prop:['a','b','c','d','e','f','g']" index="rowIndex" value="rowValue">
+				<t:if test="evenRow">
+					<td>${rowValue}</td>
+					<td>${renderOrder}</td>
+					<td>${renderTime}</td>
+				</t:if>
+				<t:if test="!evenRow">
+					<t:stitch.parallel worker="createRowWorker()" binding="rowValue">
+						<td>${rowValue}</td>
+						<td>${renderOrder}</td>
+						<td>${renderTime}</td>
+					</t:stitch.parallel>
+				</t:if>
+			</tr>	
+		</table>
+	</t:stitch.parallelContainer>
+		
+	Rendered ${workerCount} parallel workers with a combined work time of ${totalWorkSeconds} seconds 
+	in ${renderSeconds} seconds using ${threadCount} threads. 	
+
 	<h3>Source</h3>
 	<t:stitch.tabGroup>
 		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/ParallelDemo.java" />

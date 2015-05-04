@@ -46,14 +46,18 @@ public class Parallel {
 	
 	@SetupRender
 	public boolean setupRender(MarkupWriter writer) {
-		// placeholder element will be removed later
+		// insert a placeholder in the DOM (will be removed later)
 		final Element placeholder = writer.element("div");
 		writer.end();
+		
+		// take a snapshot of the worker value for cases where 
+		// the parallel instance is re-used (eg in a loop)
+		final Invokable<?> workerSnapshot = worker;
 		
 		ParallelModel model = new ParallelModel() {
 			@Override
 			public Invokable<?> getWorker() {
-				return Parallel.this.worker;
+				return workerSnapshot;
 			}
 
 			/**

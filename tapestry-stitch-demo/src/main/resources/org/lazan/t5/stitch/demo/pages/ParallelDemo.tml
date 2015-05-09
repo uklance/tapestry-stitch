@@ -10,7 +10,8 @@
 	<a href="http://tapestry.apache.org/current/apidocs/org/apache/tapestry5/ioc/Invokable.html">Invokable</a>.
 	The <code>worker</code> will eventually return a result which populates a <code>binding</code> before rendering the body 
 	of the <code>parallel</code> instance. It's important to note that the <code>worker</code> will NOT be invoked by the request
-	thread so many thread scoped services will be null as it executes (eg the request and session etc).
+	thread so many thread scoped services will be null as it executes (eg the request and session etc). Note that all rendering
+	IS performed on the request thread.
 	
 	<h4>How does it work?</h4>
 	
@@ -53,7 +54,7 @@
 	<p>
 	In the example below, each odd row is wrapped in a <code>parallel</code> component and has a 
 	<code>worker</code> that pauses for ${pauseSeconds} seconds. This causes the even rows to render before the odd rows and 
-	also means that the <code>loopValue</code> is set to the last value in the loop as the even rows render 
+	means that the <code>loopValue</code> is set to the last element as the parallel rows render 
 	</p>
 	
 	<stitch:parallelContainer>

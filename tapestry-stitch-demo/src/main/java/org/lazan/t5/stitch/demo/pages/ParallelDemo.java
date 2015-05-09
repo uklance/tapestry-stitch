@@ -3,6 +3,7 @@ package org.lazan.t5.stitch.demo.pages;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
@@ -16,7 +17,7 @@ public class ParallelDemo {
 	private int renderOrder;
 	
 	@Property
-	private int workerCount;
+	private AtomicInteger workerCount;
 	
 	@Inject @Symbol("tapestry.thread-pool.core-pool-size")
 	@Property 
@@ -36,7 +37,7 @@ public class ParallelDemo {
 	@SetupRender
 	void setupRender() {
 		renderOrder = 0;
-		workerCount = 0;
+		workerCount = new AtomicInteger(0);
 		startMillis = System.currentTimeMillis();
 	}
 	
@@ -46,20 +47,21 @@ public class ParallelDemo {
 	}
 	
 	/**
-	 * Creates an invokable which pauses for 2 seconds before returning the rowValue
+	 * Creates an invokable which pauses for 2 seconds before returning the value
 	 */
 	public Invokable<String> createRowWorker(final String value) {
+		// take a copy of workerCount since it's bound to the request thread
+		final AtomicInteger workerCountCopy = workerCount;
 		Invokable<String> worker = new Invokable<String>() {
 			@Override
 			public String invoke() {
 				try {
 					Thread.sleep(pauseSeconds * 1000);
 				} catch (Exception e) {}
-				
+				workerCountCopy.incrementAndGet();
 				return value;
 			}
 		};
-		++ workerCount;
 		return worker;
 	}
 	
@@ -76,6 +78,6 @@ public class ParallelDemo {
 	}
 	
 	public int getTotalWorkSeconds() {
-		return workerCount * pauseSeconds;
+		return workerCount.get() * pauseSeconds;
 	}
 }

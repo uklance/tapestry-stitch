@@ -51,9 +51,9 @@
 
 	<h3>Demo</h3>
 	<p>
-	In the example below, each odd row is rendered in parallel by a worker that pauses for ${pauseSeconds} seconds. 
-	This causes the even rows to render before the odd rows. Placeholders are added for the odd rows which all render 
-	in parallel after the body of the <code>parallelContainer</code> is rendered.
+	In the example below, each odd row is wrapped in a <code>parallel</code> component and has a 
+	<code>worker</code> that pauses for ${pauseSeconds} seconds. This causes the even rows to render before the odd rows and 
+	also means that the <code>loopValue</code> is set to the last value in the loop as the even rows render 
 	</p>
 	
 	<stitch:parallelContainer>
@@ -64,7 +64,7 @@
 				<th>Render Order</th>
 				<th>Elapsed Seconds</th>
 			</tr>
-			<tr t:type="loop" source="['one','two','three','four','five','six','seven']" index="rowIndex" value="loopValue">
+			<tr t:type="loop" source="['zero','one','two','three','four','five','six']" index="rowIndex" value="loopValue">
 				<t:if test="evenRow">
 					<td>${loopValue}</td>
 					<td>${parallelValue}</td>

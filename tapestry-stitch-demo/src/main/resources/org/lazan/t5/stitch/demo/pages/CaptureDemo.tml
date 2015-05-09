@@ -1,4 +1,8 @@
-<t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
+<t:layout 
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" 
+	xmlns:p="tapestry:parameter" 
+	xmlns:stitch="tapestry-library:stitch"
+>
 	<h3>Capture</h3>
 	Sometimes you want to render a tapestry template to a String instead of directly to the DOM.
 	One example of this is when you want to use the markup string in javascript. The <code>Capture</code>
@@ -14,23 +18,23 @@
 		<div class="btn btn-primary">Ajax Capture</div>
 	</t:eventlink>
 
-	<t:stitch.capture value="countToFive">
+	<stitch:capture value="countToFive">
 		Counting to five during page render: <t:loop source="1..5" value="current">${current} </t:loop>
-	</t:stitch.capture>
+	</stitch:capture>
 	
 	<t:block t:id="captureBlock">
-		<t:stitch.capture handler="countToTenHandler">
+		<stitch:capture handler="countToTenHandler">
 			Counting to ten during ajax update: <t:loop source="1..10" value="current">${current} </t:loop>
-		</t:stitch.capture>
+		</stitch:capture>
 	</t:block>
 
 	<t:zone t:id="dummyZone" />
 
 	<h3>Source</h3>
-	<t:stitch.tabGroup>
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/CaptureDemo.tml" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/CaptureDemo.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/Capture.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/model/MarkupHandler.java" />
-	</t:stitch.tabGroup>
+	<stitch:tabGroup>
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/demo/pages/CaptureDemo.tml" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/demo/pages/CaptureDemo.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/components/Capture.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/model/MarkupHandler.java" />
+	</stitch:tabGroup>
 </t:layout>

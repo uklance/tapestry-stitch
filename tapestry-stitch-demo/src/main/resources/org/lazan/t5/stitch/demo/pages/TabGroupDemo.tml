@@ -1,4 +1,8 @@
-<t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
+<t:layout 
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" 
+	xmlns:p="tapestry:parameter" 
+	xmlns:stitch="tapestry-library:stitch"
+>
 	<h3>Tab Group</h3>
 	The <code>TabGroup</code> component is a container for <code>Tab</code> components which are 
 	styled by <a href="http://twitter.github.com/bootstrap/javascript.html#tabs">Twitter bootstrap</a>
@@ -8,19 +12,19 @@
 	and improving <a href="http://en.wikipedia.org/wiki/Search_engine_optimization">SEO</a> for your site.
 	
 	<h3>Demo</h3>
-	<t:stitch.tabGroup active="fruitTab">
-		<t:stitch.tab name="apples"  label="Apples">${applesContent}</t:stitch.tab>
-		<t:stitch.tab name="oranges" label="Oranges">${orangesContent}</t:stitch.tab>
-		<t:stitch.tab name="pears"   label="Pears">${pearsContent}</t:stitch.tab>
-	</t:stitch.tabGroup>
+	<stitch:tabGroup active="fruitTab">
+		<stitch:tab name="apples"  label="Apples">${applesContent}</stitch:tab>
+		<stitch:tab name="oranges" label="Oranges">${orangesContent}</stitch:tab>
+		<stitch:tab name="pears"   label="Pears">${pearsContent}</stitch:tab>
+	</stitch:tabGroup>
 	
 	<h3>Source</h3>
-	<t:stitch.tabGroup>
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/TabGroupDemo.tml" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/TabGroupDemo.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/TabGroup.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/TabGroup.tml" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/Tab.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/model/TabGroupModel.java" />
-	</t:stitch.tabGroup>
+	<stitch:tabGroup>
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/demo/pages/TabGroupDemo.tml" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/demo/pages/TabGroupDemo.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/components/TabGroup.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/components/TabGroup.tml" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/components/Tab.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/model/TabGroupModel.java" />
+	</stitch:tabGroup>
 </t:layout>

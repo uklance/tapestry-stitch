@@ -1,4 +1,8 @@
-<t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
+<t:layout 
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" 
+	xmlns:p="tapestry:parameter" 
+	xmlns:stitch="tapestry-library:stitch"
+>
 	<h3>Grid Collapse</h3>
 	The <code>GridCollapse</code> mixin flattens a child grid nested within parent grid so that only a single table tag is rendered.
 	The column headings from the child grid are moved to the top level and appropriate <code>rowspan</code> attributes are added to
@@ -29,10 +33,10 @@
 	</t:grid>
 
 	<h3>Source</h3>
-	<t:stitch.tabGroup>
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/GridCollapseDemo.tml" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/GridCollapseDemo.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/mixins/GridCollapse.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/mixins/DisableSort.java" />
-	</t:stitch.tabGroup>
+	<stitch:tabGroup>
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/demo/pages/GridCollapseDemo.tml" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/demo/pages/GridCollapseDemo.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/mixins/GridCollapse.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/mixins/DisableSort.java" />
+	</stitch:tabGroup>
 </t:layout>

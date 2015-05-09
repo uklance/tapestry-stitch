@@ -1,4 +1,8 @@
-<t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
+<t:layout 
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" 
+	xmlns:p="tapestry:parameter" 
+	xmlns:stitch="tapestry-library:stitch"
+>
 	<h3>Map Binding</h3>
 	<p>The <code>map:</code> binding prefix is a two-way binding which can <code>get()</code> and <code>put()</code>
 	to a property of type <code>java.util.Map</code>. This binding is useful when you have a dynamic set of fields in a form.</p>
@@ -12,7 +16,7 @@
 	</t:if>
 	<t:form t:id="form">
 		Please enter values starting with the letter 'a'<br />
-		<t:stitch.errors />
+		<stitch:errors />
 		<t:loop source="fieldNames" value="fieldName">
 			${fieldName} <t:textfield t:id="genericField" value="map:fieldValues[fieldName]" translate="string" /><br />
 		</t:loop>
@@ -20,12 +24,12 @@
 	</t:form>
 	
 	<h3>Source</h3>
-	<t:stitch.tabGroup>
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/MapBindingDemo.tml" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/MapBindingDemo.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/binding/MapBinding.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/binding/MapBindingFactory.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/field/FieldSnapshot.java" />
-	</t:stitch.tabGroup>
+	<stitch:tabGroup>
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/demo/pages/MapBindingDemo.tml" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/demo/pages/MapBindingDemo.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/binding/MapBinding.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/binding/MapBindingFactory.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/field/FieldSnapshot.java" />
+	</stitch:tabGroup>
 	
 </t:layout>

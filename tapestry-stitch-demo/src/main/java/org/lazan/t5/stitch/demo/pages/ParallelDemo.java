@@ -23,8 +23,11 @@ public class ParallelDemo {
 	private int threadCount;
 	
 	@Property
-	private String rowValue;
+	private String loopValue;
 
+	@Property
+	private String parallelValue;
+	
 	@Property
 	private Integer rowIndex;
 	
@@ -45,8 +48,7 @@ public class ParallelDemo {
 	/**
 	 * Creates an invokable which pauses for 2 seconds before returning the rowValue
 	 */
-	public Invokable<String> createRowWorker() {
-		final String valueSnapshot = rowValue;
+	public Invokable<String> createRowWorker(final String value) {
 		Invokable<String> worker = new Invokable<String>() {
 			@Override
 			public String invoke() {
@@ -54,7 +56,7 @@ public class ParallelDemo {
 					Thread.sleep(pauseSeconds * 1000);
 				} catch (Exception e) {}
 				
-				return valueSnapshot;
+				return value;
 			}
 		};
 		++ workerCount;
@@ -69,7 +71,7 @@ public class ParallelDemo {
 		return ++renderOrder;
 	}
 	
-	public double getRenderSeconds() {
+	public double getElapsedSeconds() {
 		return (System.currentTimeMillis() - startMillis) / 1000D;
 	}
 	

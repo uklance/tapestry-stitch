@@ -1,4 +1,8 @@
-<t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
+<t:layout 
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" 
+	xmlns:p="tapestry:parameter" 
+	xmlns:stitch="tapestry-library:stitch"
+>
 	<h3>Progress Link</h3>
 	The <code>ProgressLink</code> component renders a link and a progress bar styled by
 	<a href="http://twitter.github.com/bootstrap/components.html#progress">Twitter Bootstrap</a> CSS.
@@ -10,21 +14,21 @@
 	<div class="row-fluid">
 		<div class="span4">
 			<t:loop source="1..3">
-				<t:stitch.progressLink task="task">
+				<stitch:progressLink task="task">
 					<p:label><div class="btn btn-primary">Start</div></p:label>
-				</t:stitch.progressLink>
+				</stitch:progressLink>
 				<br />
 			</t:loop>
 		</div>
 	</div>
 	<h3>Source</h3>
-	<t:stitch.tabGroup>
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/ProgressLinkDemo.tml" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/ProgressLinkDemo.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/model/ProgressTask.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/ProgressLink.tml" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/ProgressLink.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/ProgressLink.js" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/services/internal/ProgressTaskManagerImpl.java" />
-	</t:stitch.tabGroup>
+	<stitch:tabGroup>
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/demo/pages/ProgressLinkDemo.tml" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/demo/pages/ProgressLinkDemo.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/model/ProgressTask.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/components/ProgressLink.tml" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/components/ProgressLink.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/components/ProgressLink.js" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/services/internal/ProgressTaskManagerImpl.java" />
+	</stitch:tabGroup>
 </t:layout>

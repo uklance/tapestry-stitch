@@ -1,16 +1,24 @@
-<t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
-	<h3>Parallel Rendering</h3>
+<t:layout 
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" 
+	xmlns:p="tapestry:parameter" 
+	xmlns:stitch="tapestry-library:stitch"
+>
+	<h3>Parallel</h3>
 	
 	The <code>parallel</code> component works together with the <code>parallelContainer</code> to perform 
-	work on thread pool. This is done by delaying the rendering of the body until later, allowing all workers defined 
-	inside a <code>parallelContainer</code> to run at the same time using the 
-	<a href="http://tapestry.apache.org/current/apidocs/org/apache/tapestry5/ioc/services/ParallelExecutor.html">ParallelExecutor</a>.
-	Long running tasks can be performed by the <code>worker</code>, an instance of 
+	work on a pool of threads. Long running tasks can be performed by the <code>worker</code>, an instance of 
 	<a href="http://tapestry.apache.org/current/apidocs/org/apache/tapestry5/ioc/Invokable.html">Invokable</a>.
-	The worker will eventually return a result which populates a <code>binding</code> before rendering the body 
+	The <code>worker</code> will eventually return a result which populates a <code>binding</code> before rendering the body 
 	of the <code>parallel</code> instance. It's important to note that the <code>worker</code> will NOT be invoked by the request
 	thread so many thread scoped services will be null as it executes (eg the request and session etc).
 	
+	<h4>How does it work?</h4>
+	
+	Instead of immediately rendering it's body, the <code>parallel</code> component adds a placeholder to the DOM and registers itself 
+	with it's <code>parallelContainer</code>. The <code>parallelContainer</code> runs all the workers concurrently on the 
+	<a href="http://tapestry.apache.org/current/apidocs/org/apache/tapestry5/ioc/services/ParallelExecutor.html">ParallelExecutor</a>
+	and triggers each <code>parallel</code> to render it's body once the <code>worker</code> has yielded a result.
+
 	<h4>Parameters:</h4>
 	<table class="table table-bordered">
 		<thead>
@@ -26,7 +34,7 @@
 				<td>worker</td>
 				<td><a href="http://tapestry.apache.org/current/apidocs/org/apache/tapestry5/ioc/Invokable.html">Invokable</a></td>
 				<td>true</td>
-				<td>A long running task which returns a value. This will be invoked in parallel</td>
+				<td>A long running task which returns a value, all workers defined within a parallelContainer will execute concurrently</td>
 			</tr>
 			<tr>
 				<td>binding</td>
@@ -48,40 +56,43 @@
 	in parallel after the body of the <code>parallelContainer</code> is rendered.
 	</p>
 	
-	<t:stitch.parallelContainer>
+	<stitch:parallelContainer>
 		<table class="table table-bordered table-striped">
 			<tr>
-				<th>Value</th>
+				<th>Loop Value</th>
+				<th>Parallel Value</th>
 				<th>Render Order</th>
-				<th>Rendered at</th>
+				<th>Elapsed Seconds</th>
 			</tr>
-			<tr t:type="loop" source="prop:['a','b','c','d','e','f','g']" index="rowIndex" value="rowValue">
+			<tr t:type="loop" source="['one','two','three','four','five','six','seven']" index="rowIndex" value="loopValue">
 				<t:if test="evenRow">
-					<td>${rowValue}</td>
+					<td>${loopValue}</td>
+					<td>${parallelValue}</td>
 					<td>${renderOrder}</td>
-					<td>${renderTime}</td>
+					<td>${elapsedSeconds}</td>
 				</t:if>
 				<t:if test="!evenRow">
-					<t:stitch.parallel worker="createRowWorker()" binding="rowValue">
-						<td>${rowValue}</td>
+					<stitch:parallel worker="createRowWorker(loopValue)" binding="parallelValue">
+						<td>${loopValue}</td>
+						<td>${parallelValue}</td>
 						<td>${renderOrder}</td>
-						<td>${renderTime}</td>
-					</t:stitch.parallel>
+						<td>${elapsedSeconds}</td>
+					</stitch:parallel>
 				</t:if>
 			</tr>	
 		</table>
-	</t:stitch.parallelContainer>
+	</stitch:parallelContainer>
 		
 	Rendered ${workerCount} parallel workers with a combined work time of ${totalWorkSeconds} seconds 
-	in ${renderSeconds} seconds using ${threadCount} threads. 	
+	in ${elapsedSeconds} seconds using ${threadCount} threads. 	
 
 	<h3>Source</h3>
-	<t:stitch.tabGroup>
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/ParallelDemo.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/ParallelDemo.tml" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/Parallel.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/ParallelContainer.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/model/ParallelModel.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/model/ParallelContainerModel.java" />
-	</t:stitch.tabGroup>
+	<stitch:tabGroup>
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/demo/pages/ParallelDemo.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/demo/pages/ParallelDemo.tml" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/components/Parallel.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/components/ParallelContainer.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/model/ParallelModel.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/model/ParallelContainerModel.java" />
+	</stitch:tabGroup>
 </t:layout>

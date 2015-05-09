@@ -1,4 +1,8 @@
-<t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
+<t:layout 
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" 
+	xmlns:p="tapestry:parameter" 
+	xmlns:stitch="tapestry-library:stitch"
+>
 	<h3>Database Tree</h3>
 	The following is a demo of a
 	<a href="http://tapestry.apache.org/current/apidocs/org/apache/tapestry5/corelib/components/Tree.html">Tree</a> 
@@ -52,16 +56,16 @@
 		
 
 	<h3>Source</h3>
-	<t:stitch.tabGroup>
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/DatabaseTreeDemo.tml" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/DatabaseTreeDemo.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/model/ItemTreeSource.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/model/ItemTreeNode.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/entities/Item.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/entities/Category.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/services/ItemCreator.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/model/LazyTreeModel.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/model/LazyTreeNode.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/model/LazyTreeModelSource.java" />
-	</t:stitch.tabGroup>
+	<stitch:tabGroup>
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/demo/pages/DatabaseTreeDemo.tml" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/demo/pages/DatabaseTreeDemo.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/demo/model/ItemTreeSource.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/demo/model/ItemTreeNode.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/demo/entities/Item.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/demo/entities/Category.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/demo/services/ItemCreator.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/model/LazyTreeModel.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/model/LazyTreeNode.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/model/LazyTreeModelSource.java" />
+	</stitch:tabGroup>
 </t:layout>

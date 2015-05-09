@@ -1,4 +1,8 @@
-<t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
+<t:layout 
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" 
+	xmlns:p="tapestry:parameter" 
+	xmlns:stitch="tapestry-library:stitch"
+>
 	<h3>Observe Mixin</h3>
 	The <code>observe</code> mixin attaches to a client element and listens to a clientside event
 	(eg click, change, keyup etc). When the event fires on the element, the mixin fires a serverside event
@@ -96,11 +100,11 @@
 	</div>
 	</div>
 	<h3>Source</h3>
-	<t:stitch.tabGroup>
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/ObserveDemo.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/ObserveDemo.tml" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/mixins/Observe.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/mixins/Observe.js" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/services/internal/StringEventContext.java" />
-	</t:stitch.tabGroup>
+	<stitch:tabGroup>
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/demo/pages/ObserveDemo.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/demo/pages/ObserveDemo.tml" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/mixins/Observe.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/mixins/Observe.js" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/services/internal/StringEventContext.java" />
+	</stitch:tabGroup>
 </t:layout>

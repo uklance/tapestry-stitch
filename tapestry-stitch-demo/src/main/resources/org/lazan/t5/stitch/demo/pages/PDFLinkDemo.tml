@@ -1,7 +1,8 @@
 <t:layout xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd"
 	xmlns:p="tapestry:parameter" xmlns:fo="http://www.w3.org/1999/XSL/Format"
-	xmlns:fox="http://xml.apache.org/fop/extensions">
-
+	xmlns:fox="http://xml.apache.org/fop/extensions"
+	xmlns:stitch="tapestry-library:stitch"
+>
 	<h3>PDF Link</h3>
 	The <code>PDFLink</code> component renders a link which generates a PDF. The PDF is rendered by
 	<a href="http://xmlgraphics.apache.org/fop/">Apache FOP</a> which transforms a FO
@@ -11,9 +12,9 @@
 	<a href="http://tapestry.apache.org/component-templates.html">component template</a> instead.
 
 	<h3>Demo</h3>
-	<t:stitch.pdflink label="Download PDF" fileName="literal:myPdf.pdf">
+	<stitch:pdflink label="Download PDF" fileName="literal:myPdf.pdf">
 		<p:fo><t:delegate to="block:pdfFo" /></p:fo>
-	</t:stitch.pdflink>
+	</stitch:pdflink>
 	
 	<t:block t:id="pdfFo">
 		<fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -72,10 +73,10 @@
 	
 	
 	<h3>Source</h3>
-	<t:stitch.tabGroup>
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/PDFLinkDemo.tml" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/demo/pages/PDFLinkDemo.java" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/PDFLink.tml" />
-		<t:stitch.codeTab source="classpath:org/lazan/t5/stitch/components/PDFLink.java" />
-	</t:stitch.tabGroup>
+	<stitch:tabGroup>
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/demo/pages/PDFLinkDemo.tml" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/demo/pages/PDFLinkDemo.java" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/components/PDFLink.tml" />
+		<stitch:codeTab source="classpath:org/lazan/t5/stitch/components/PDFLink.java" />
+	</stitch:tabGroup>
 </t:layout>
